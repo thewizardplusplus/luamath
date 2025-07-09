@@ -23,6 +23,7 @@ test_dependencies = {
 build = {
   type = "builtin",
   modules = {
+    ["luamath.vector2d"] = "vector2d.lua",
   },
   copy_directories = {
     "doc",
