@@ -169,7 +169,7 @@ end
 -- @tparam number|Vector2D right_operand
 -- @treturn Vector2D
 -- @raise error message
-function Vector2.__div(left_operand, right_operand)
+function Vector2D.__div(left_operand, right_operand)
   assertions.is_instance(left_operand, Vector2D)
 
   local is_right_operand_number = checks.is_number(right_operand)
