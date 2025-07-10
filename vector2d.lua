@@ -12,6 +12,12 @@ Vector2D:include(Nameable)
 Vector2D:include(Stringifiable)
 
 ---
+-- @table static
+-- @tfield Vector2D ZERO
+-- @tfield Vector2D BASIS_X
+-- @tfield Vector2D BASIS_Y
+
+---
 -- @table instance
 -- @tfield number x
 -- @tfield number y
@@ -130,6 +136,51 @@ function Vector2D.__mul(left_operand, right_operand)
 end
 
 ---
+-- @treturn Vector2D
+function Vector2D:neg()
+  return self:mul(-1)
+end
+
+---
+-- @function __unm
+-- @treturn Vector2D
+Vector2D.__unm = Vector2D.neg
+
+---
+-- @tparam Vector2D other
+-- @treturn boolean
+function Vector2D:equals(other)
+  assertions.is_instance(other, Vector2D)
+
+  return self.x == other.x and self.y == other.y
+end
+
+---
+-- @tparam Vector2D other
+-- @tparam[opt=1e-6] number epsilon
+-- @treturn boolean
+function Vector2D:almost_equals(other, epsilon)
+  epsilon = epsilon or 1e-6
+
+  assertions.is_instance(other, Vector2D)
+  assertions.is_number(epsilon)
+
+  return Vector2D._almost_equal(self.x, other.x, epsilon)
+    and Vector2D._almost_equal(self.y, other.y, epsilon)
+end
+
+---
+-- @tparam Vector2D left_operand
+-- @tparam Vector2D right_operand
+-- @treturn boolean
+function Vector2D.__eq(left_operand, right_operand)
+  assertions.is_instance(left_operand, Vector2D)
+  assertions.is_instance(right_operand, Vector2D)
+
+  return left_operand:equals(right_operand)
+end
+
+---
 -- @tparam Vector2D other
 -- @treturn number
 function Vector2D:dot(other)
@@ -206,6 +257,19 @@ function Vector2D:normalized()
   end
 
   return self:div(length)
+end
+
+-- we cannot declare the constants at the beginning since the method `initialize()` isn't defined there yet
+Vector2D.static.ZERO = Vector2D:new(0, 0)
+Vector2D.static.BASIS_X = Vector2D:new(1, 0)
+Vector2D.static.BASIS_Y = Vector2D:new(0, 1)
+
+function Vector2D.static._almost_equal(left_operand, right_operand, epsilon)
+  assertions.is_number(left_operand)
+  assertions.is_number(right_operand)
+  assertions.is_number(epsilon)
+
+  return math.abs(left_operand - right_operand) <= epsilon
 end
 
 return Vector2D
