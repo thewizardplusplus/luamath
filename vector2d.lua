@@ -1,3 +1,5 @@
+-- luacheck: no max comment line length
+
 ---
 -- @classmod Vector2D
 
