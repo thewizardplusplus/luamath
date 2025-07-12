@@ -127,6 +127,13 @@ function TestVector2D.test_length_method()
 end
 
 function TestVector2D.test_length_metamethod()
+  if _VERSION == "Lua 5.1" then
+    luaunit.skip(
+      "Lua 5.1 doesn't support the `__len()` metamethod "
+        .. "when it's defined only on the prototype (class metatable)"
+    )
+  end
+
   local vector = Vector2D:new(3, 4)
 
   local result = #vector
