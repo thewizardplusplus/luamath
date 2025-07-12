@@ -52,6 +52,69 @@ end
 
 ---
 -- @tparam Vector2D other
+-- @treturn boolean
+function Vector2D:equals(other)
+  assertions.is_instance(other, Vector2D)
+
+  return self.x == other.x and self.y == other.y
+end
+
+---
+-- @tparam Vector2D left_operand
+-- @tparam Vector2D right_operand
+-- @treturn boolean
+function Vector2D.__eq(left_operand, right_operand)
+  assertions.is_instance(left_operand, Vector2D)
+  assertions.is_instance(right_operand, Vector2D)
+
+  return left_operand:equals(right_operand)
+end
+
+---
+-- @tparam Vector2D other
+-- @tparam[opt=1e-6] number epsilon
+-- @treturn boolean
+function Vector2D:almost_equals(other, epsilon)
+  epsilon = epsilon or 1e-6
+
+  assertions.is_instance(other, Vector2D)
+  assertions.is_number(epsilon)
+
+  return Vector2D._almost_equal(self.x, other.x, epsilon)
+    and Vector2D._almost_equal(self.y, other.y, epsilon)
+end
+
+---
+-- @treturn number
+function Vector2D:length_squared()
+  return self.x * self.x + self.y * self.y
+end
+
+---
+-- @treturn number
+function Vector2D:length()
+  return math.sqrt(self:length_squared())
+end
+
+---
+-- @function __len
+-- @treturn number
+Vector2D.__len = Vector2D.length
+
+---
+-- @treturn Vector2D
+-- @raise error message
+function Vector2D:normalized()
+  local length = self:length()
+  if length == 0 then
+    error("cannot normalize zero-length vector")
+  end
+
+  return self:div(length)
+end
+
+---
+-- @tparam Vector2D other
 -- @treturn Vector2D
 function Vector2D:add(other)
   assertions.is_instance(other, Vector2D)
@@ -150,40 +213,6 @@ Vector2D.__unm = Vector2D.neg
 
 ---
 -- @tparam Vector2D other
--- @treturn boolean
-function Vector2D:equals(other)
-  assertions.is_instance(other, Vector2D)
-
-  return self.x == other.x and self.y == other.y
-end
-
----
--- @tparam Vector2D other
--- @tparam[opt=1e-6] number epsilon
--- @treturn boolean
-function Vector2D:almost_equals(other, epsilon)
-  epsilon = epsilon or 1e-6
-
-  assertions.is_instance(other, Vector2D)
-  assertions.is_number(epsilon)
-
-  return Vector2D._almost_equal(self.x, other.x, epsilon)
-    and Vector2D._almost_equal(self.y, other.y, epsilon)
-end
-
----
--- @tparam Vector2D left_operand
--- @tparam Vector2D right_operand
--- @treturn boolean
-function Vector2D.__eq(left_operand, right_operand)
-  assertions.is_instance(left_operand, Vector2D)
-  assertions.is_instance(right_operand, Vector2D)
-
-  return left_operand:equals(right_operand)
-end
-
----
--- @tparam Vector2D other
 -- @treturn number
 function Vector2D:dot(other)
   assertions.is_instance(other, Vector2D)
@@ -230,35 +259,6 @@ function Vector2D.__div(left_operand, right_operand)
   assertions.is_true(is_right_operand_number or is_right_operand_vector_2d)
 
   return left_operand:div(right_operand)
-end
-
----
--- @treturn number
-function Vector2D:length_squared()
-  return self.x * self.x + self.y * self.y
-end
-
----
--- @treturn number
-function Vector2D:length()
-  return math.sqrt(self:length_squared())
-end
-
----
--- @function __len
--- @treturn number
-Vector2D.__len = Vector2D.length
-
----
--- @treturn Vector2D
--- @raise error message
-function Vector2D:normalized()
-  local length = self:length()
-  if length == 0 then
-    error("cannot normalize zero-length vector")
-  end
-
-  return self:div(length)
 end
 
 -- we cannot declare the constants at the beginning since the method `initialize()` isn't defined there yet

@@ -27,6 +27,131 @@ function TestVector2D.test_tostring()
   .. "}")
 end
 
+-- Vector2D:equals()
+function TestVector2D.test_equals_method_true()
+  local vector = Vector2D:new(1, 2)
+  local other_vector = Vector2D:new(1, 2)
+
+  local result = vector:equals(other_vector)
+
+  luaunit.assert_true(result)
+end
+
+function TestVector2D.test_equals_method_false()
+  local vector = Vector2D:new(1, 2)
+  local other_vector = Vector2D:new(2, 1)
+
+  local result = vector:equals(other_vector)
+
+  luaunit.assert_false(result)
+end
+
+function TestVector2D.test_equals_metamethod_true()
+  local vector = Vector2D:new(1, 2)
+  local other_vector = Vector2D:new(1, 2)
+
+  local result = (vector == other_vector)
+
+  luaunit.assert_true(result)
+end
+
+function TestVector2D.test_equals_metamethod_false()
+  local vector = Vector2D:new(1, 2)
+  local other_vector = Vector2D:new(2, 1)
+
+  local result = (vector == other_vector)
+
+  luaunit.assert_false(result)
+end
+
+function TestVector2D.test_not_equals_metamethod_true()
+  local vector = Vector2D:new(1, 2)
+  local other_vector = Vector2D:new(2, 1)
+
+  local result = (vector ~= other_vector)
+
+  luaunit.assert_true(result)
+end
+
+function TestVector2D.test_not_equals_metamethod_false()
+  local vector = Vector2D:new(1, 2)
+  local other_vector = Vector2D:new(1, 2)
+
+  local result = (vector ~= other_vector)
+
+  luaunit.assert_false(result)
+end
+
+function TestVector2D.test_almost_equals_true_with_defaults()
+  local vector = Vector2D:new(1.0000001, 2.0000001)
+  local other_vector = Vector2D:new(1.0, 2.0)
+
+  local result = vector:almost_equals(other_vector)
+
+  luaunit.assert_true(result)
+end
+
+function TestVector2D.test_almost_equals_true_with_no_defaults()
+  local vector = Vector2D:new(1.0000001, 2.0000001)
+  local other_vector = Vector2D:new(1.0, 2.0)
+
+  local result = vector:almost_equals(other_vector, 1e-6)
+
+  luaunit.assert_true(result)
+end
+
+function TestVector2D.test_almost_equals_false()
+  local vector = Vector2D:new(1.0000001, 2.0000001)
+  local other_vector = Vector2D:new(1.0, 2.0)
+
+  local result = vector:almost_equals(other_vector, 1e-12)
+
+  luaunit.assert_false(result)
+end
+
+-- Vector2D:length()
+function TestVector2D.test_length_squared()
+  local vector = Vector2D:new(3, 4)
+
+  local result = vector:length_squared()
+
+  luaunit.assert_equals(result, 25)
+end
+
+function TestVector2D.test_length_method()
+  local vector = Vector2D:new(3, 4)
+
+  local result = vector:length()
+
+  luaunit.assert_equals(result, 5)
+end
+
+function TestVector2D.test_length_metamethod()
+  local vector = Vector2D:new(3, 4)
+
+  local result = #vector
+
+  luaunit.assert_equals(result, 5)
+end
+
+-- Vector2D:normalized()
+function TestVector2D.test_normalized_method()
+  local vector = Vector2D:new(3, 4)
+
+  local result = vector:normalized()
+
+  luaunit.assert_almost_equals(result.x, 0.6, 1e-6)
+  luaunit.assert_almost_equals(result.y, 0.8, 1e-6)
+end
+
+function TestVector2D.test_normalized_zero()
+  local vector = Vector2D:new(0, 0)
+
+  luaunit.assert_error_msg_contains("cannot normalize zero-length vector", function()
+    vector:normalized()
+  end)
+end
+
 -- Vector2D:add()
 function TestVector2D.test_add_method()
   local vector = Vector2D:new(1, 2)
@@ -125,88 +250,6 @@ function TestVector2D.test_neg_metamethod()
   luaunit.assert_equals(result, Vector2D:new(-3, 4))
 end
 
--- Vector2D:equals()
-function TestVector2D.test_equals_method_true()
-  local vector = Vector2D:new(1, 2)
-  local other_vector = Vector2D:new(1, 2)
-
-  local result = vector:equals(other_vector)
-
-  luaunit.assert_true(result)
-end
-
-function TestVector2D.test_equals_method_false()
-  local vector = Vector2D:new(1, 2)
-  local other_vector = Vector2D:new(2, 1)
-
-  local result = vector:equals(other_vector)
-
-  luaunit.assert_false(result)
-end
-
-function TestVector2D.test_equals_metamethod_true()
-  local vector = Vector2D:new(1, 2)
-  local other_vector = Vector2D:new(1, 2)
-
-  local result = (vector == other_vector)
-
-  luaunit.assert_true(result)
-end
-
-function TestVector2D.test_equals_metamethod_false()
-  local vector = Vector2D:new(1, 2)
-  local other_vector = Vector2D:new(2, 1)
-
-  local result = (vector == other_vector)
-
-  luaunit.assert_false(result)
-end
-
-function TestVector2D.test_not_equals_metamethod_true()
-  local vector = Vector2D:new(1, 2)
-  local other_vector = Vector2D:new(2, 1)
-
-  local result = (vector ~= other_vector)
-
-  luaunit.assert_true(result)
-end
-
-function TestVector2D.test_not_equals_metamethod_false()
-  local vector = Vector2D:new(1, 2)
-  local other_vector = Vector2D:new(1, 2)
-
-  local result = (vector ~= other_vector)
-
-  luaunit.assert_false(result)
-end
-
-function TestVector2D.test_almost_equals_true_with_defaults()
-  local vector = Vector2D:new(1.0000001, 2.0000001)
-  local other_vector = Vector2D:new(1.0, 2.0)
-
-  local result = vector:almost_equals(other_vector)
-
-  luaunit.assert_true(result)
-end
-
-function TestVector2D.test_almost_equals_true_with_no_defaults()
-  local vector = Vector2D:new(1.0000001, 2.0000001)
-  local other_vector = Vector2D:new(1.0, 2.0)
-
-  local result = vector:almost_equals(other_vector, 1e-6)
-
-  luaunit.assert_true(result)
-end
-
-function TestVector2D.test_almost_equals_false()
-  local vector = Vector2D:new(1.0000001, 2.0000001)
-  local other_vector = Vector2D:new(1.0, 2.0)
-
-  local result = vector:almost_equals(other_vector, 1e-12)
-
-  luaunit.assert_false(result)
-end
-
 -- Vector2D:dot()
 function TestVector2D.test_dot()
   local vector = Vector2D:new(1, 2)
@@ -275,49 +318,6 @@ function TestVector2D.test_div_by_zero_component_wize_y()
 
   luaunit.assert_error_msg_contains("component-wise division by zero", function()
     vector:div(other_vector)
-  end)
-end
-
--- Vector2D:length()
-function TestVector2D.test_length_squared()
-  local vector = Vector2D:new(3, 4)
-
-  local result = vector:length_squared()
-
-  luaunit.assert_equals(result, 25)
-end
-
-function TestVector2D.test_length_method()
-  local vector = Vector2D:new(3, 4)
-
-  local result = vector:length()
-
-  luaunit.assert_equals(result, 5)
-end
-
-function TestVector2D.test_length_metamethod()
-  local vector = Vector2D:new(3, 4)
-
-  local result = #vector
-
-  luaunit.assert_equals(result, 5)
-end
-
--- Vector2D:normalized()
-function TestVector2D.test_normalized_method()
-  local vector = Vector2D:new(3, 4)
-
-  local result = vector:normalized()
-
-  luaunit.assert_almost_equals(result.x, 0.6, 1e-6)
-  luaunit.assert_almost_equals(result.y, 0.8, 1e-6)
-end
-
-function TestVector2D.test_normalized_zero()
-  local vector = Vector2D:new(0, 0)
-
-  luaunit.assert_error_msg_contains("cannot normalize zero-length vector", function()
-    vector:normalized()
   end)
 end
 
