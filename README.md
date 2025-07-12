@@ -8,7 +8,7 @@
 
 The library that implements various auxiliary math classes and functions.
 
-_**Disclaimer:** this library was written directly on an Android smartphone with the [QLua](https://play.google.com/store/apps/details?id=com.quseit.qlua5pro2) IDE._
+_**Disclaimer:** this library was written directly on an Android smartphone with the ~~[QLua](https://play.google.com/store/apps/details?id=com.quseit.qlua5pro2)~~ [LuaDroid](https://play.google.com/store/apps/details?id=com.alif.ide.lua) IDE._
 
 ## Installation
 
