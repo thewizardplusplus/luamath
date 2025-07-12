@@ -24,6 +24,7 @@ build = {
   type = "builtin",
   modules = {
     ["luamath.vector2d"] = "vector2d.lua",
+    ["luamath.vector2d_test"] = "vector2d_test.lua",
   },
   copy_directories = {
     "doc",
