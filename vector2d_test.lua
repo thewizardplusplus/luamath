@@ -147,9 +147,12 @@ end
 function TestVector2D.test_normalized_zero()
   local vector = Vector2D:new(0, 0)
 
-  luaunit.assert_error_msg_contains("cannot normalize zero-length vector", function()
-    vector:normalized()
-  end)
+  luaunit.assert_error_msg_contains(
+    "cannot normalize zero-length vector",
+    function()
+      vector:normalized()
+    end
+  )
 end
 
 -- Vector2D:add()
@@ -307,18 +310,24 @@ function TestVector2D.test_div_by_zero_component_wize_x()
   local vector = Vector2D:new(1, 1)
   local other_vector = Vector2D:new(0, 1)
 
-  luaunit.assert_error_msg_contains("component-wise division by zero", function()
-    vector:div(other_vector)
-  end)
+  luaunit.assert_error_msg_contains(
+    "component-wise division by zero",
+    function()
+      vector:div(other_vector)
+    end
+  )
 end
 
 function TestVector2D.test_div_by_zero_component_wize_y()
   local vector = Vector2D:new(1, 1)
   local other_vector = Vector2D:new(1, 0)
 
-  luaunit.assert_error_msg_contains("component-wise division by zero", function()
-    vector:div(other_vector)
-  end)
+  luaunit.assert_error_msg_contains(
+    "component-wise division by zero",
+    function()
+      vector:div(other_vector)
+    end
+  )
 end
 
 return TestVector2D
