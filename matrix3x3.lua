@@ -148,7 +148,11 @@ function Matrix3x3:almost_equals(other, epsilon)
 
   for row = 1, 3 do
     for column = 1, 3 do
-      if not Matrix3x3._almost_equal(self.elements[row][column], other.elements[row][column], epsilon) then
+      if not Matrix3x3._almost_equal(
+        self.elements[row][column],
+        other.elements[row][column],
+        epsilon
+      ) then
         return false
       end
     end
@@ -168,7 +172,9 @@ function Matrix3x3:add(other)
     result[row] = {}
 
     for column = 1, 3 do
-      result[row][column] = self.elements[row][column] + other.elements[row][column]
+      result[row][column] =
+        self.elements[row][column]
+        + other.elements[row][column]
     end
   end
 
@@ -197,7 +203,9 @@ function Matrix3x3:sub(other)
     result[row] = {}
 
     for column = 1, 3 do
-      result[row][column] = self.elements[row][column] - other.elements[row][column]
+      result[row][column] =
+        self.elements[row][column]
+        - other.elements[row][column]
     end
   end
 
@@ -222,7 +230,11 @@ function Matrix3x3:mul(value)
   local is_value_number = checks.is_number(value)
   local is_value_vector_2d = checks.is_instance(value, Vector2D)
   local is_value_matrix_3x3 = checks.is_instance(value, Matrix3x3)
-  assertions.is_true(is_value_number or is_value_vector_2d or is_value_matrix_3x3)
+  assertions.is_true(
+    is_value_number
+    or is_value_vector_2d
+    or is_value_matrix_3x3
+  )
 
   if is_value_number then
     local result = {}
@@ -230,7 +242,7 @@ function Matrix3x3:mul(value)
       result[row] = {}
 
       for column = 1, 3 do
-        result[row][column] = self.elements[row][column] * other
+        result[row][column] = self.elements[row][column] * value
       end
     end
 
@@ -238,8 +250,14 @@ function Matrix3x3:mul(value)
   end
 
   if is_value_vector_2d then
-    local x = self.elements[1][1] * other.x + self.elements[1][2] * other.y + self.elements[1][3]
-    local y = self.elements[2][1] * other.x + self.elements[2][2] * other.y + self.elements[2][3]
+    local x =
+      self.elements[1][1] * value.x
+      + self.elements[1][2] * value.y
+      + self.elements[1][3]
+    local y =
+      self.elements[2][1] * value.x
+      + self.elements[2][2] * value.y
+      + self.elements[2][3]
     return Vector2D:new(x, y)
   end
 
@@ -252,7 +270,9 @@ function Matrix3x3:mul(value)
         result[row][column] = 0
 
         for k = 1, 3 do
-          result[row][column] = result[row][column] + self.elements[row][k] * other.elements[k][column]
+          result[row][column] =
+            result[row][column]
+            + self.elements[row][k] * value.elements[k][column]
         end
       end
     end
@@ -272,7 +292,8 @@ function Matrix3x3.__mul(left_operand, right_operand)
 
   local is_right_operand_number = checks.is_number(right_operand)
   local is_right_operand_vector_2d = checks.is_instance(right_operand, Vector2D)
-  local is_right_operand_matrix_3x3 = checks.is_instance(right_operand, Matrix3x3)
+  local is_right_operand_matrix_3x3 =
+    checks.is_instance(right_operand, Matrix3x3)
 
   assertions.is_true(
     (is_left_operand_matrix_3x3 and is_right_operand_matrix_3x3)
