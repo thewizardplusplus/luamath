@@ -26,7 +26,7 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
       - `normalized()` — return the normalized vector
       - `add(other)` — add another vector
       - `sub(other)` — subtract another vector
-      - `mul(value)` — multiply by a scalar or perform component-wise multiplication with another vector
+      - `mul(value)` — multiply by a scalar, matrix, or perform component-wise multiplication with another vector
       - `neg()` — unary minus
       - `dot(other)` — compute the dot product
       - `div(value)` — divide by a scalar or perform component-wise division by another vector
@@ -35,9 +35,31 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
       - `#vector` — compute the length (`__len()`); supported only since Lua 5.2
       - `+` — add two vectors (`__add()`)
       - `-` — subtract two vectors (`__sub()`)
-      - `*` — multiply by a scalar (`vector * scalar` or `scalar * vector`) or perform component-wise multiplication (`vector * vector`) (`__mul()`)
+      - `*` — multiply by a scalar (`vector * scalar` or `scalar * vector`), matrix (`vector * matrix` or `matrix * vector`), or perform component-wise multiplication (`vector * vector`) (`__mul()`)
       - `-vector` — unary minus (`__unm()`)
       - `/` — divide by a scalar (`vector / scalar`) or perform component-wise division (`vector / vector`) (`__div()`)
+  - `Matrix3x3`:
+    - **Constants**:
+      - `ZERO` — zero matrix
+      - `IDENTITY` — identity matrix
+    - **Operations**:
+      - `equals(other)` — check exact equality
+      - `almost_equals(other, [epsilon])` — check approximate equality within a given epsilon
+      - `add(other)` — add another matrix
+      - `sub(other)` — subtract another matrix
+      - `mul(value)` — multiply by a scalar, vector, or another matrix
+      - `div(value)` — divide by a scalar
+    - **Operators (via metamethods)**:
+      - `==` — check exact equality (`__eq()`)
+      - `+` — add two matrices (`__add()`)
+      - `-` — subtract two matrices (`__sub()`)
+      - `*` — multiply by a scalar (`matrix * scalar` or `scalar * matrix`), vector (`matrix * vector` or `vector * matrix`), or another matrix (`matrix * matrix`) (`__mul()`)
+      - `/` — divide by a scalar (`matrix / scalar`) (`__div()`)
+    - **Transformation matrix factories**:
+      - `translate(delta_x, delta_y)` — translation
+      - `rotate(angle)` — rotation
+      - `scale(scale_x, scale_y)` — scaling
+      - `shear(shear_x, shear_y)` — shear
 
 ## Installation
 
