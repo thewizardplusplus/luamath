@@ -424,8 +424,6 @@ function TestMatrix3x3.test_mul_metamethod_matrix_vector()
 end
 
 function TestMatrix3x3.test_mul_metamethod_vector_matrix()
-  luaunit.skip("not yet supported")
-
   local vector = Vector2D:new(2, 3)
   local matrix = Matrix3x3:new({
     {1, 0, 5},

@@ -154,12 +154,20 @@ function Vector2D.__sub(left_operand, right_operand)
 end
 
 ---
--- @tparam number|Vector2D value
--- @treturn Vector2D
+-- @tparam number|Vector2D|Matrix3x3 value
+-- @treturn Vector2D|Matrix3x3
 function Vector2D:mul(value)
+  -- import locally to avoid cyclic dependencies
+  local Matrix3x3 = require("luamath.matrix3x3")
+
   local is_value_number = checks.is_number(value)
   local is_value_vector_2d = checks.is_instance(value, Vector2D)
-  assertions.is_true(is_value_number or is_value_vector_2d)
+  local is_value_matrix_3x3 = checks.is_instance(value, Matrix3x3)
+  assertions.is_true(
+    is_value_number
+    or is_value_vector_2d
+    or is_value_matrix_3x3
+  )
 
   if is_value_number then
     return Vector2D:new(self.x * value, self.y * value)
@@ -168,27 +176,39 @@ function Vector2D:mul(value)
   if is_value_vector_2d then
     return Vector2D:new(self.x * value.x, self.y * value.y)
   end
+
+  if is_value_matrix_3x3 then
+    return value:mul(self)
+  end
 end
 
 ---
--- @tparam number|Vector2D left_operand
--- @tparam number|Vector2D right_operand
--- @treturn Vector2D
+-- @tparam number|Vector2D|Matrix3x3 left_operand
+-- @tparam number|Vector2D|Matrix3x3 right_operand
+-- @treturn Vector2D|Matrix3x3
 function Vector2D.__mul(left_operand, right_operand)
+  -- import locally to avoid cyclic dependencies
+  local Matrix3x3 = require("luamath.matrix3x3")
+
   local is_left_operand_number = checks.is_number(left_operand)
   local is_left_operand_vector_2d = checks.is_instance(left_operand, Vector2D)
+  local is_left_operand_matrix_3x3 = checks.is_instance(left_operand, Matrix3x3)
 
   local is_right_operand_number = checks.is_number(right_operand)
   local is_right_operand_vector_2d = checks.is_instance(right_operand, Vector2D)
+  local is_right_operand_matrix_3x3 =
+    checks.is_instance(right_operand, Matrix3x3)
 
   assertions.is_true(
     (is_left_operand_vector_2d and (
       is_right_operand_number
       or is_right_operand_vector_2d
+      or is_right_operand_matrix_3x3
     ))
     or (is_right_operand_vector_2d and (
       is_left_operand_number
       or is_left_operand_vector_2d
+      or is_left_operand_matrix_3x3
     ))
   )
 

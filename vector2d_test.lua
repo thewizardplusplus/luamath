@@ -1,6 +1,7 @@
 local luaunit = require("luaunit")
 local checks = require("luatypechecks.checks")
 local Vector2D = require("luamath.vector2d")
+local Matrix3x3 = require("luamath.matrix3x3")
 
 -- luacheck: globals TestVector2D
 TestVector2D = {}
@@ -218,6 +219,19 @@ function TestVector2D.test_mul_method_vector()
   luaunit.assert_equals(result, Vector2D:new(8, 15))
 end
 
+function TestVector2D.test_mul_method_matrix()
+  local vector = Vector2D:new(2, 3)
+  local matrix = Matrix3x3:new({
+    {1, 0, 5},
+    {0, 1, 6},
+    {0, 0, 1},
+  })
+
+  local result = vector:mul(matrix)
+
+  luaunit.assert_equals(result, Vector2D:new(7, 9))
+end
+
 function TestVector2D.test_mul_metamethod_vector_scalar()
   local vector = Vector2D:new(2, 3)
 
@@ -232,6 +246,32 @@ function TestVector2D.test_mul_metamethod_scalar_vector()
   local result = 5 * vector
 
   luaunit.assert_equals(result, Vector2D:new(10, 15))
+end
+
+function TestVector2D.test_mul_metamethod_vector_matrix()
+  local vector = Vector2D:new(2, 3)
+  local matrix = Matrix3x3:new({
+    {1, 0, 5},
+    {0, 1, 6},
+    {0, 0, 1},
+  })
+
+  local result = vector * matrix
+
+  luaunit.assert_equals(result, Vector2D:new(7, 9))
+end
+
+function TestVector2D.test_mul_metamethod_matrix_vector()
+  local matrix = Matrix3x3:new({
+    {1, 0, 5},
+    {0, 1, 6},
+    {0, 0, 1},
+  })
+  local vector = Vector2D:new(2, 3)
+
+  local result = matrix * vector
+
+  luaunit.assert_equals(result, Vector2D:new(7, 9))
 end
 
 function TestVector2D.test_mul_metamethod_vector_vector()
