@@ -1,6 +1,6 @@
 rockspec_format = "3.0"
 package = "luamath"
-version = "1.0.0-1"
+version = "1.1.0-1"
 description = {
   summary="The library that implements various auxiliary math classes and functions.",
   license = "MIT",
@@ -9,7 +9,7 @@ description = {
 }
 source = {
   url = "git+https://github.com/thewizardplusplus/luamath.git",
-  tag = "v1.0.0",
+  tag = "v1.1.0",
 }
 dependencies = {
   "lua >= 5.1",
