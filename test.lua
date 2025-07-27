@@ -8,6 +8,7 @@ local luaunit = require("luaunit")
 
 for _, module in ipairs({
   "vector2d",
+  "matrix3x3",
 }) do
   require("luamath." .. module .. "_test")
 end
