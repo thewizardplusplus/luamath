@@ -53,3 +53,22 @@ function TestUtils.test_clamp_after_maximum()
 
   luaunit.assert_equals(result, 42)
 end
+
+-- utils.lerp()
+function TestUtils.test_lerp_middle()
+  local result = utils.lerp(23, 42, 0.2)
+
+  luaunit.assert_equals(result, 26.8)
+end
+
+function TestUtils.test_lerp_minimum()
+  local result = utils.lerp(23, 42, 0)
+
+  luaunit.assert_equals(result, 23)
+end
+
+function TestUtils.test_lerp_maximum()
+  local result = utils.lerp(23, 42, 1)
+
+  luaunit.assert_equals(result, 42)
+end
