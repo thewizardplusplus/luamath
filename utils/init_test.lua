@@ -1,4 +1,5 @@
 local luaunit = require("luaunit")
+local checks = require("luatypechecks.checks")
 local utils = require("luamath.utils")
 
 -- luacheck: globals TestUtils
