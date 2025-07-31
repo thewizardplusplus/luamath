@@ -8,6 +8,7 @@ local assertions = require("luatypechecks.assertions")
 local checks = require("luatypechecks.checks")
 local Nameable = require("luaserialization.nameable")
 local Stringifiable = require("luaserialization.stringifiable")
+local utils = require("luamath.utils")
 
 local Vector2D = middleclass("Vector2D")
 Vector2D:include(Nameable)
@@ -80,8 +81,8 @@ function Vector2D:almost_equals(other, epsilon)
   assertions.is_instance(other, Vector2D)
   assertions.is_number(epsilon)
 
-  return Vector2D._almost_equal(self.x, other.x, epsilon)
-    and Vector2D._almost_equal(self.y, other.y, epsilon)
+  return utils.almost_equal(self.x, other.x, epsilon)
+    and utils.almost_equal(self.y, other.y, epsilon)
 end
 
 ---
@@ -286,13 +287,5 @@ end
 Vector2D.static.ZERO = Vector2D:new(0, 0)
 Vector2D.static.BASIS_X = Vector2D:new(1, 0)
 Vector2D.static.BASIS_Y = Vector2D:new(0, 1)
-
-function Vector2D.static._almost_equal(left_operand, right_operand, epsilon)
-  assertions.is_number(left_operand)
-  assertions.is_number(right_operand)
-  assertions.is_number(epsilon)
-
-  return math.abs(left_operand - right_operand) <= epsilon
-end
 
 return Vector2D

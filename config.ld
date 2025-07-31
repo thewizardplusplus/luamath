@@ -9,6 +9,7 @@ full_description = [[
 file = {
   "vector2d.lua",
   "matrix3x3.lua",
+  "utils/init.lua",
 }
 topics = {
   "README.md",

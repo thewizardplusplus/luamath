@@ -9,6 +9,7 @@ local checks = require("luatypechecks.checks")
 local Nameable = require("luaserialization.nameable")
 local Stringifiable = require("luaserialization.stringifiable")
 local Vector2D = require("luamath.vector2d")
+local utils = require("luamath.utils")
 
 local Matrix3x3 = middleclass("Matrix3x3")
 Matrix3x3:include(Nameable)
@@ -151,7 +152,7 @@ function Matrix3x3:almost_equals(other, epsilon)
 
   for row = 1, 3 do
     for column = 1, 3 do
-      if not Matrix3x3._almost_equal(
+      if not utils.almost_equal(
         self.elements[row][column],
         other.elements[row][column],
         epsilon
@@ -366,13 +367,5 @@ Matrix3x3.static.IDENTITY = Matrix3x3:new{
   {0, 1, 0},
   {0, 0, 1}
 }
-
-function Matrix3x3.static._almost_equal(left_operand, right_operand, epsilon)
-  assertions.is_number(left_operand)
-  assertions.is_number(right_operand)
-  assertions.is_number(epsilon)
-
-  return math.abs(left_operand - right_operand) <= epsilon
-end
 
 return Matrix3x3
