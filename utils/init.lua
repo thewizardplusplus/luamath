@@ -20,4 +20,23 @@ function utils.almost_equal(left_operand, right_operand, epsilon)
   return math.abs(left_operand - right_operand) <= epsilon
 end
 
+---
+-- @tparam number value
+-- @tparam number minimum
+-- @tparam number maximum
+-- @treturn number
+function utils.clamp(value, minimum, maximum)
+  assertions.is_number(value)
+  assertions.is_number(minimum)
+  assertions.is_number(maximum)
+
+  if value < minimum then
+    value = minimum
+  elseif value > maximum then
+    value = maximum
+  end
+
+  return value
+end
+
 return utils
