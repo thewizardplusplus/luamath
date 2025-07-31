@@ -39,4 +39,17 @@ function utils.clamp(value, minimum, maximum)
   return value
 end
 
+---
+-- @tparam number minimum
+-- @tparam number maximum
+-- @tparam number progress
+-- @treturn number
+function utils.lerp(minimum, maximum, progress)
+  assertions.is_number(minimum)
+  assertions.is_number(maximum)
+  assertions.is_number(progress)
+
+  return (maximum - minimum) * progress + minimum
+end
+
 return utils
