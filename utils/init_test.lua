@@ -146,3 +146,21 @@ function TestUtils.test_random_in_range()
     luaunit.assert_almost_equals(result, wanted_results[index], 1e-6)
   end
 end
+
+function TestUtils.test_random_in_range_rejects_degenerate_range()
+  luaunit.assert_error_msg_contains(
+    "`minimum` must be less than `maximum`",
+    function()
+      utils.random_in_range(23, 23)
+    end
+  )
+end
+
+function TestUtils.test_random_in_range_rejects_inverted_range()
+  luaunit.assert_error_msg_contains(
+    "`minimum` must be less than `maximum`",
+    function()
+      utils.random_in_range(42, 23)
+    end
+  )
+end

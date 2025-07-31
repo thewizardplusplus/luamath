@@ -56,9 +56,14 @@ end
 -- @tparam number minimum
 -- @tparam number maximum
 -- @treturn number
+-- @raise error message
 function utils.random_in_range(minimum, maximum)
   assertions.is_number(minimum)
   assertions.is_number(maximum)
+
+  if minimum >= maximum then
+    error("`minimum` must be less than `maximum`")
+  end
 
   return utils.lerp(minimum, maximum, math.random())
 end
