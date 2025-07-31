@@ -52,4 +52,15 @@ function utils.lerp(minimum, maximum, progress)
   return (maximum - minimum) * progress + minimum
 end
 
+---
+-- @tparam number minimum
+-- @tparam number maximum
+-- @treturn number
+function utils.random_in_range(minimum, maximum)
+  assertions.is_number(minimum)
+  assertions.is_number(maximum)
+
+  return utils.lerp(minimum, maximum, math.random())
+end
+
 return utils
