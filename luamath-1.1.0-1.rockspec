@@ -27,6 +27,8 @@ build = {
     ["luamath.vector2d_test"] = "vector2d_test.lua",
     ["luamath.matrix3x3"] = "matrix3x3.lua",
     ["luamath.matrix3x3_test"] = "matrix3x3_test.lua",
+    ["luamath.utils"] = "utils/init.lua",
+    ["luamath.utils.init_test"] = "utils/init_test.lua",
   },
   copy_directories = {
     "doc",
