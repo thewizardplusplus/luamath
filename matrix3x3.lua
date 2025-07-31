@@ -53,11 +53,13 @@ function Matrix3x3.static.from_options(options)
 end
 
 ---
--- @table static
+-- @table class
 -- @tfield Matrix3x3 ZERO
 -- @tfield Matrix3x3 IDENTITY
 
 ---
+-- @function translate
+-- @static
 -- @tparam number delta_x
 -- @tparam number delta_y
 -- @treturn Matrix3x3
@@ -73,6 +75,8 @@ function Matrix3x3.static.translate(delta_x, delta_y)
 end
 
 ---
+-- @function rotate
+-- @static
 -- @tparam number angle in radians
 -- @treturn Matrix3x3
 function Matrix3x3.static.rotate(angle)
@@ -89,6 +93,8 @@ function Matrix3x3.static.rotate(angle)
 end
 
 ---
+-- @function scale
+-- @static
 -- @tparam number scale_x
 -- @tparam number scale_y
 -- @treturn Matrix3x3
@@ -104,6 +110,11 @@ function Matrix3x3.static.scale(scale_x, scale_y)
 end
 
 ---
+-- ⚠️. Creates a shear (skew) transformation, which slants a shape along one
+-- or both axes by shifting each coordinate in proportion to the other:
+-- `x' = x + shear_x * y`, `y' = y + shear_y * x`.
+-- @function shear
+-- @static
 -- @tparam number shear_x
 -- @tparam number shear_y
 -- @treturn Matrix3x3
