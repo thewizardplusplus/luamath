@@ -1,10 +1,45 @@
 local luaunit = require("luaunit")
 local checks = require("luatypechecks.checks")
+local json = require("luaserialization.json")
 local Vector2D = require("luamath.vector2d")
 local Matrix3x3 = require("luamath.matrix3x3")
 
 -- luacheck: globals TestVector2D
 TestVector2D = {}
+
+-- json.from_json()
+function TestVector2D.test_from_json_success()
+  local vector, err = json.from_json(
+    [[{"__name":"Vector2D","x":3,"y":4}]],
+    Vector2D.schema(),
+    { Vector2D = Vector2D.from_options }
+  )
+
+  luaunit.assert_is_table(vector)
+  luaunit.assert_true(checks.is_instance(vector, Vector2D))
+  luaunit.assert_equals(vector, Vector2D:new(3, 4))
+
+  luaunit.assert_nil(err)
+end
+
+function TestVector2D.test_from_json_error()
+  local vector, err = json.from_json(
+    [[{"__name":"Vector2D","x":"invalid","y":4}]],
+    Vector2D.schema(),
+    { Vector2D = Vector2D.from_options }
+  )
+
+  luaunit.assert_nil(vector)
+
+  luaunit.assert_is_string(err)
+  luaunit.assert_str_matches(
+    err,
+    "^invalid data: " ..
+      [[property "x" validation failed: ]] ..
+      "wrong type: " ..
+      "expected number, got string$"
+  )
+end
 
 -- Vector2D:new()
 function TestVector2D.test_new()

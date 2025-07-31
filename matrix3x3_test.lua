@@ -1,10 +1,57 @@
 local luaunit = require("luaunit")
 local checks = require("luatypechecks.checks")
+local json = require("luaserialization.json")
 local Matrix3x3 = require("luamath.matrix3x3")
 local Vector2D = require("luamath.vector2d")
 
 -- luacheck: globals TestMatrix3x3
 TestMatrix3x3 = {}
+
+-- json.from_json()
+function TestMatrix3x3.test_from_json_success()
+  local matrix, err = json.from_json(
+    [=[{
+      "__name": "Matrix3x3",
+      "elements": [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    }]=],
+    Matrix3x3.schema(),
+    { Matrix3x3 = Matrix3x3.from_options }
+  )
+
+  luaunit.assert_is_table(matrix)
+  luaunit.assert_true(checks.is_instance(matrix, Matrix3x3))
+  luaunit.assert_equals(matrix, Matrix3x3:new({
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9},
+  }))
+
+  luaunit.assert_nil(err)
+end
+
+function TestMatrix3x3.test_from_json_error()
+  local matrix, err = json.from_json(
+    [=[{
+      "__name": "Matrix3x3",
+      "elements": [[1, 2, 3], [4, 5, "invalid"], [7, 8, 9]]
+    }]=],
+    Matrix3x3.schema(),
+    { Matrix3x3 = Matrix3x3.from_options }
+  )
+
+  luaunit.assert_nil(matrix)
+
+  luaunit.assert_is_string(err)
+  luaunit.assert_str_matches(
+    err,
+    "^invalid data: " ..
+      [[property "elements" validation failed: ]] ..
+      "failed to validate item 2: " ..
+      "failed to validate item 3: " ..
+      "wrong type: " ..
+      "expected number, got string$"
+  )
+end
 
 -- Matrix3x3.static.translate()
 function TestMatrix3x3.test_translate()

@@ -14,6 +14,32 @@ Vector2D:include(Nameable)
 Vector2D:include(Stringifiable)
 
 ---
+-- @function schema
+-- @static
+-- @treturn tab JSON Schema for this class
+--   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
+function Vector2D.static.schema()
+  return {
+    type = "object",
+    required = {"x", "y"},
+    properties = { x = { type = "number" }, y = { type = "number" } },
+  }
+end
+
+---
+-- @function from_options
+-- @static
+-- @tparam tab options constructor options conforming to the JSON Schema
+--   returned by @{Vector2D.schema|Vector2D.schema()}
+--   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
+-- @treturn Vector2D
+function Vector2D.static.from_options(options)
+  assertions.is_table(options)
+
+  return Vector2D:new(options.x, options.y)
+end
+
+---
 -- @table static
 -- @tfield Vector2D ZERO
 -- @tfield Vector2D BASIS_X

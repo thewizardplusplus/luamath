@@ -15,6 +15,44 @@ Matrix3x3:include(Nameable)
 Matrix3x3:include(Stringifiable)
 
 ---
+-- @function schema
+-- @static
+-- @treturn tab JSON Schema for this class
+--   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
+function Matrix3x3.static.schema()
+  return {
+    type = "object",
+    required = {"elements"},
+    properties = {
+      elements = {
+        type = "array",
+        minItems = 3,
+        maxItems = 3,
+        items = {
+          type = "array",
+          minItems = 3,
+          maxItems = 3,
+          items = { type = "number" },
+        },
+      },
+    },
+  }
+end
+
+---
+-- @function from_options
+-- @static
+-- @tparam tab options constructor options conforming to the JSON Schema
+--   returned by @{Matrix3x3.schema|Matrix3x3.schema()}
+--   (see the [luaserialization](https://github.com/thewizardplusplus/luaserialization) library)
+-- @treturn Matrix3x3
+function Matrix3x3.static.from_options(options)
+  assertions.is_table(options)
+
+  return Matrix3x3:new(options.elements)
+end
+
+---
 -- @table static
 -- @tfield Matrix3x3 ZERO
 -- @tfield Matrix3x3 IDENTITY
