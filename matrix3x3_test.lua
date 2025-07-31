@@ -113,6 +113,54 @@ function TestMatrix3x3.test_new()
   })
 end
 
+function TestMatrix3x3.test_new_with_wrong_row_count()
+  luaunit.assert_error_msg_contains(
+    "`elements` must contain exactly three rows",
+    function()
+      Matrix3x3:new({
+        {1, 2, 3},
+        {4, 5, 6},
+      })
+    end
+  )
+
+  luaunit.assert_error_msg_contains(
+    "`elements` must contain exactly three rows",
+    function()
+      Matrix3x3:new({
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9},
+        {10, 11, 12},
+      })
+    end
+  )
+end
+
+function TestMatrix3x3.test_new_with_wrong_column_count()
+  luaunit.assert_error_msg_contains(
+    "each row of `elements` must contain exactly three elements",
+    function()
+      Matrix3x3:new({
+        {1, 2, 3},
+        {4, 5},
+        {6, 7, 8},
+      })
+    end
+  )
+
+  luaunit.assert_error_msg_contains(
+    "each row of `elements` must contain exactly three elements",
+    function()
+      Matrix3x3:new({
+        {1, 2, 3},
+        {4, 5, 6, 7},
+        {8, 9, 10},
+      })
+    end
+  )
+end
+
 -- tostring()
 function TestMatrix3x3.test_tostring()
   local matrix = Matrix3x3:new({

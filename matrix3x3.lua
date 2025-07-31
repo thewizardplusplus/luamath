@@ -129,10 +129,17 @@ end
 function Matrix3x3:initialize(elements)
   assertions.is_sequence(
     elements,
-    checks.make_sequence_checker(
-      checks.is_number
-    )
+    checks.make_sequence_checker(checks.is_number)
   )
+
+  if #elements ~= 3 then
+    error("`elements` must contain exactly three rows")
+  end
+  for _, row in ipairs(elements) do
+    if #row ~= 3 then
+      error("each row of `elements` must contain exactly three elements")
+    end
+  end
 
   self.elements = elements
 end
