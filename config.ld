@@ -10,6 +10,7 @@ file = {
   "vector2d.lua",
   "matrix3x3.lua",
   "utils/init.lua",
+  "models/size.lua",
 }
 topics = {
   "README.md",
