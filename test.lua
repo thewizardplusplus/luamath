@@ -10,6 +10,7 @@ for _, module in ipairs({
   "vector2d",
   "matrix3x3",
   "utils.init",
+  "models.size",
 }) do
   require("luamath." .. module .. "_test")
 end
