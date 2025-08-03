@@ -156,7 +156,7 @@ end
 
 ---
 -- @tparam number|Vector2D|Matrix3x3 value
--- @treturn Vector2D|Matrix3x3
+-- @treturn Vector2D
 function Vector2D:mul(value)
   -- import locally to avoid cyclic dependencies
   local Matrix3x3 = require("luamath.matrix3x3")
@@ -186,7 +186,7 @@ end
 ---
 -- @tparam number|Vector2D|Matrix3x3 left_operand
 -- @tparam number|Vector2D|Matrix3x3 right_operand
--- @treturn Vector2D|Matrix3x3
+-- @treturn Vector2D
 function Vector2D.__mul(left_operand, right_operand)
   -- import locally to avoid cyclic dependencies
   local Matrix3x3 = require("luamath.matrix3x3")
