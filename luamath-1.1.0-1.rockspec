@@ -31,6 +31,7 @@ build = {
     ["luamath.utils.init_test"] = "utils/init_test.lua",
     ["luamath.models.size"] = "models/size.lua",
     ["luamath.models.size_test"] = "models/size_test.lua",
+    ["luamath.models.boundingbox"] = "models/boundingbox.lua",
   },
   copy_directories = {
     "doc",
