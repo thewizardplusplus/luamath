@@ -1,3 +1,5 @@
+-- luacheck: no max comment line length
+
 ---
 -- @classmod BoundingBox
 
@@ -27,7 +29,7 @@ function BoundingBox.static.from_position_and_size(position, size)
 end
 
 ---
--- @tparam BoundingBox ... one or more boxes
+-- @tparam BoundingBox,... ... one or more boxes
 -- @treturn BoundingBox the smallest box containing all input boxes
 -- @raise error message
 function BoundingBox.static.union(...)
@@ -45,7 +47,7 @@ function BoundingBox.static.union(...)
   local result = BoundingBox:new(min, max)
 
   for box_index = 2, #boxes do
-    local box = boxes[box_index]
+    local box = boxes[box_index] -- luacheck: no redefined
 
     if box.min.x < result.min.x then
       result.min.x = box.min.x
@@ -66,7 +68,7 @@ function BoundingBox.static.union(...)
 end
 
 ---
--- @tparam BoundingBox ... one or more boxes
+-- @tparam BoundingBox,... ... one or more boxes
 -- @treturn BoundingBox|nil the overlapping region of all input boxes, or nil if empty
 -- @raise error message
 function BoundingBox.static.intersection(...)
@@ -84,7 +86,7 @@ function BoundingBox.static.intersection(...)
   local result = BoundingBox:new(min, max)
 
   for box_index = 2, #boxes do
-    local box = boxes[box_index]
+    local box = boxes[box_index] -- luacheck: no redefined
 
     if box.min.x > result.min.x then
       result.min.x = box.min.x
@@ -228,21 +230,21 @@ function BoundingBox:bottom_right()
 end
 
 ---
--- @tparam Vector2D|BoundingBox other
+-- @tparam Vector2D|BoundingBox value
 -- @treturn boolean
-function BoundingBox:contains(other)
+function BoundingBox:contains(value)
   local is_value_vector_2d = checks.is_instance(value, Vector2D)
   local is_value_bounding_box = checks.is_instance(value, BoundingBox)
   assertions.is_true(is_value_vector_2d or is_value_bounding_box)
 
   if is_value_vector_2d then
-    return other.x >= self.min.x and other.x <= self.max.x
-      and other.y >= self.min.y and other.y <= self.max.y
+    return value.x >= self.min.x and value.x <= self.max.x
+      and value.y >= self.min.y and value.y <= self.max.y
   end
 
   if is_value_bounding_box then
-    return self.min.x <= other.min.x and self.max.x >= other.max.x
-      and self.min.y <= other.min.y and self.max.y >= other.max.y
+    return self.min.x <= value.min.x and self.max.x >= value.max.x
+      and self.min.y <= value.min.y and self.max.y >= value.max.y
   end
 end
 
