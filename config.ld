@@ -11,6 +11,7 @@ file = {
   "matrix3x3.lua",
   "utils/init.lua",
   "models/size.lua",
+  "models/boundingbox.lua",
 }
 topics = {
   "README.md",
