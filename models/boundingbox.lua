@@ -176,8 +176,8 @@ function BoundingBox:almost_equals(other, epsilon)
   assertions.is_instance(other, BoundingBox)
   assertions.is_number(epsilon)
 
-  return utils.almost_equal(self.min, other.min, epsilon)
-    and utils.almost_equal(self.max, other.max, epsilon)
+  return self.min:almost_equals(other.min, epsilon)
+    and self.max:almost_equals(other.max, epsilon)
 end
 
 ---
