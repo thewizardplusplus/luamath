@@ -74,7 +74,7 @@ function TestBoundingBox.test_intersection_no_overlap()
   local box_two = BoundingBox:new(Vector2D:new(2, 2), Vector2D:new(3, 3))
   local box_three = BoundingBox:new(Vector2D:new(4, 4), Vector2D:new(5, 5))
 
-  local result = BoundingBox.intersection(box_one, box_two)
+  local result = BoundingBox.intersection(box_one, box_two, box_three)
 
   luaunit.assert_nil(result)
 end
@@ -189,7 +189,10 @@ function TestBoundingBox.test_not_equals_metamethod_false()
 end
 
 function TestBoundingBox.test_almost_equals_true_with_defaults()
-  local box = BoundingBox:new(Vector2D:new(0.0000001, 0.0000001), Vector2D:new(3.0000001, 4.0000001))
+  local box = BoundingBox:new(
+    Vector2D:new(0.0000001, 0.0000001),
+    Vector2D:new(3.0000001, 4.0000001)
+  )
   local other_box = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(3, 4))
 
   local result = box:almost_equals(other_box)
@@ -198,7 +201,10 @@ function TestBoundingBox.test_almost_equals_true_with_defaults()
 end
 
 function TestBoundingBox.test_almost_equals_true_with_no_defaults()
-  local box = BoundingBox:new(Vector2D:new(0.0000001, 0.0000001), Vector2D:new(3.0000001, 4.0000001))
+  local box = BoundingBox:new(
+    Vector2D:new(0.0000001, 0.0000001),
+    Vector2D:new(3.0000001, 4.0000001)
+  )
   local other_box = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(3, 4))
 
   local result = box:almost_equals(other_box, 1e-6)
@@ -207,7 +213,10 @@ function TestBoundingBox.test_almost_equals_true_with_no_defaults()
 end
 
 function TestBoundingBox.test_almost_equals_false()
-  local box = BoundingBox:new(Vector2D:new(0.0000001, 0.0000001), Vector2D:new(3.0000001, 4.0000001))
+  local box = BoundingBox:new(
+    Vector2D:new(0.0000001, 0.0000001),
+    Vector2D:new(3.0000001, 4.0000001)
+  )
   local other_box = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(3, 4))
 
   local result = box:almost_equals(other_box, 1e-12)

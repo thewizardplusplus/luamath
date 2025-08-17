@@ -10,7 +10,6 @@ local Nameable = require("luaserialization.nameable")
 local Stringifiable = require("luaserialization.stringifiable")
 local Vector2D = require("luamath.vector2d")
 local Size = require("luamath.models.size")
-local utils = require("luamath.utils")
 
 local BoundingBox = middleclass("BoundingBox")
 BoundingBox:include(Nameable)
