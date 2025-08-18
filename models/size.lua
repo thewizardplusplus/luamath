@@ -3,13 +3,9 @@
 
 local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
-local Nameable = require("luaserialization.nameable")
-local Stringifiable = require("luaserialization.stringifiable")
 local Vector2D = require("luamath.vector2d")
 
 local Size = middleclass("Size", Vector2D)
-Size:include(Nameable)
-Size:include(Stringifiable)
 
 ---
 -- @table instance
