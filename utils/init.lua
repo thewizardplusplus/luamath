@@ -6,6 +6,37 @@ local assertions = require("luatypechecks.assertions")
 local utils = {}
 
 ---
+-- @tparam number value
+-- @tparam[opt=0] int precision number of decimal places; negative values round
+--   to places before the decimal point (e.g., `-2` rounds to hundreds)
+-- @treturn number
+function utils.round(value, precision)
+  precision = precision or 0
+
+  assertions.is_number(value)
+  assertions.is_number(precision)
+
+  local factor = 10 ^ precision
+  local scaled_value = value * factor
+
+  -- compare the fractional part instead of adding 0.5 before truncation;
+  -- adding it can round values just below a half up and change large integral
+  -- floating-point values; see https://github.com/golang/go/issues/20100
+  local rounded_value = scaled_value >= 0
+    and math.floor(scaled_value)
+    or math.ceil(scaled_value)
+  if math.abs(scaled_value - rounded_value) >= 0.5 then
+    rounded_value = rounded_value + (scaled_value >= 0 and 1 or -1)
+  end
+
+  local result = rounded_value / factor
+
+  -- restore the integer subtype for integral results after float division
+  local integer_result = math.floor(result)
+  return integer_result == result and integer_result or result
+end
+
+---
 -- @tparam number left_operand
 -- @tparam number right_operand
 -- @tparam[opt=1e-6] number epsilon

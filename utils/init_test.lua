@@ -5,6 +5,46 @@ local utils = require("luamath.utils")
 -- luacheck: globals TestUtils
 TestUtils = {}
 
+-- utils.round()
+function TestUtils.test_round_to_integer_by_default()
+  luaunit.assert_equals(utils.round(23.4), 23)
+  luaunit.assert_equals(utils.round(23.6), 24)
+end
+
+function TestUtils.test_round_to_decimal_precision()
+  luaunit.assert_equals(utils.round(23.454, 2), 23.45)
+  luaunit.assert_equals(utils.round(23.456, 2), 23.46)
+end
+
+function TestUtils.test_round_to_negative_precision()
+  luaunit.assert_equals(utils.round(2345, -2), 2300)
+  luaunit.assert_equals(utils.round(2355, -2), 2400)
+end
+
+function TestUtils.test_round_halfway_away_from_zero()
+  luaunit.assert_equals(utils.round(23.5), 24)
+  luaunit.assert_equals(utils.round(-23.5), -24)
+  luaunit.assert_equals(utils.round(2.345, 2), 2.35)
+  luaunit.assert_equals(utils.round(-2.345, 2), -2.35)
+end
+
+function TestUtils.test_round_floating_point_edge_cases()
+  luaunit.assert_equals(utils.round(0.49999999999999994), 0)
+
+  local large_odd_integer = 2.0 ^ 52 + 1
+  luaunit.assert_equals(utils.round(large_odd_integer), large_odd_integer)
+end
+
+function TestUtils.test_round_integer_result_subtype()
+  if _VERSION == "Lua 5.1" or _VERSION == "Lua 5.2" then
+    luaunit.skip("Lua 5.1 and Lua 5.2 don't support integer subtypes")
+  end
+
+  luaunit.assert_equals(math.type(utils.round(23.4)), "integer")
+  luaunit.assert_equals(math.type(utils.round(23.001, 2)), "integer")
+  luaunit.assert_equals(math.type(utils.round(2345, -2)), "integer")
+end
+
 -- utils.almost_equal()
 function TestUtils.test_almost_equal_true_with_defaults()
   local result = utils.almost_equal(1.0000001, 1.0)
