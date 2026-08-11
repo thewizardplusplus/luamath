@@ -96,22 +96,54 @@ function TestUtils.test_clamp_after_maximum()
 end
 
 -- utils.lerp()
-function TestUtils.test_lerp_middle()
-  local result = utils.lerp(23, 42, 0.2)
-
-  luaunit.assert_equals(result, 26.8)
+function TestUtils.test_lerp_inside_range()
+  luaunit.assert_almost_equals(utils.lerp(23, 42, 0.2), 26.8, 1e-6)
+  luaunit.assert_almost_equals(utils.lerp(23, 42, 0.8), 38.2, 1e-6)
 end
 
-function TestUtils.test_lerp_minimum()
-  local result = utils.lerp(23, 42, 0)
-
-  luaunit.assert_equals(result, 23)
+function TestUtils.test_lerp_at_endpoints()
+  luaunit.assert_equals(utils.lerp(23, 42, 0), 23)
+  luaunit.assert_equals(utils.lerp(23, 42, 1), 42)
 end
 
-function TestUtils.test_lerp_maximum()
-  local result = utils.lerp(23, 42, 1)
+function TestUtils.test_lerp_extrapolates()
+  luaunit.assert_equals(utils.lerp(23, 42, -1), 4)
+  luaunit.assert_equals(utils.lerp(23, 42, 2), 61)
+end
 
-  luaunit.assert_equals(result, 42)
+function TestUtils.test_lerp_descending_range()
+  luaunit.assert_almost_equals(utils.lerp(42, 23, 0.2), 38.2, 1e-6)
+  luaunit.assert_almost_equals(utils.lerp(42, 23, 0.8), 26.8, 1e-6)
+end
+
+-- utils.inverse_lerp()
+function TestUtils.test_inverse_lerp_inside_range()
+  luaunit.assert_almost_equals(utils.inverse_lerp(23, 42, 26.8), 0.2, 1e-6)
+  luaunit.assert_almost_equals(utils.inverse_lerp(23, 42, 38.2), 0.8, 1e-6)
+end
+
+function TestUtils.test_inverse_lerp_at_endpoints()
+  luaunit.assert_equals(utils.inverse_lerp(23, 42, 23), 0)
+  luaunit.assert_equals(utils.inverse_lerp(23, 42, 42), 1)
+end
+
+function TestUtils.test_inverse_lerp_extrapolates()
+  luaunit.assert_equals(utils.inverse_lerp(23, 42, 4), -1)
+  luaunit.assert_equals(utils.inverse_lerp(23, 42, 61), 2)
+end
+
+function TestUtils.test_inverse_lerp_descending_range()
+  luaunit.assert_almost_equals(utils.inverse_lerp(42, 23, 38.2), 0.2, 1e-6)
+  luaunit.assert_almost_equals(utils.inverse_lerp(42, 23, 26.8), 0.8, 1e-6)
+end
+
+function TestUtils.test_inverse_lerp_rejects_degenerate_range()
+  luaunit.assert_error_msg_contains(
+    "`minimum` and `maximum` must be different",
+    function()
+      utils.inverse_lerp(23, 23, 23)
+    end
+  )
 end
 
 -- utils.random_in_range()
