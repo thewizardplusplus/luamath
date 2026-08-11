@@ -35,6 +35,8 @@ build = {
     ["luamath.models.boundingbox_test"] = "models/boundingbox_test.lua",
     ["luamath.models.range"] = "models/range.lua",
     ["luamath.models.range_test"] = "models/range_test.lua",
+    ["luamath.models.color"] = "models/color.lua",
+    ["luamath.models.color_test"] = "models/color_test.lua",
   },
   copy_directories = {
     "doc",
