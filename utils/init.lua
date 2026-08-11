@@ -86,6 +86,24 @@ end
 ---
 -- @tparam number minimum
 -- @tparam number maximum
+-- @tparam number value
+-- @treturn number
+-- @raise error message
+function utils.inverse_lerp(minimum, maximum, value)
+  assertions.is_number(minimum)
+  assertions.is_number(maximum)
+  assertions.is_number(value)
+
+  if minimum == maximum then
+    error("`minimum` and `maximum` must be different")
+  end
+
+  return (value - minimum) / (maximum - minimum)
+end
+
+---
+-- @tparam number minimum
+-- @tparam number maximum
 -- @treturn number
 -- @raise error message
 function utils.random_in_range(minimum, maximum)
