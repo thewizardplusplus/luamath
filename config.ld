@@ -12,6 +12,7 @@ file = {
   "utils/init.lua",
   "models/size.lua",
   "models/boundingbox.lua",
+  "models/range.lua",
 }
 topics = {
   "README.md",
