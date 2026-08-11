@@ -13,6 +13,7 @@ file = {
   "models/size.lua",
   "models/boundingbox.lua",
   "models/range.lua",
+  "models/color.lua",
 }
 topics = {
   "README.md",
