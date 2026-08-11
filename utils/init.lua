@@ -101,10 +101,27 @@ function utils.inverse_lerp(minimum, maximum, value)
   return (value - minimum) / (maximum - minimum)
 end
 
+-- @tparam number value
+-- @tparam number minimum
+-- @tparam number maximum
+-- @treturn number value in the half-open interval `[minimum, maximum)`
+-- @raise error message
+function utils.wrap(value, minimum, maximum)
+  assertions.is_number(value)
+  assertions.is_number(minimum)
+  assertions.is_number(maximum)
+
+  if minimum >= maximum then
+    error("`minimum` must be less than `maximum`")
+  end
+
+  return (value - minimum) % (maximum - minimum) + minimum
+end
+
 ---
 -- @tparam number minimum
 -- @tparam number maximum
--- @treturn number
+-- @treturn number value in the half-open interval `[minimum, maximum)`
 -- @raise error message
 function utils.random_in_range(minimum, maximum)
   assertions.is_number(minimum)

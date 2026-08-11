@@ -146,6 +146,41 @@ function TestUtils.test_inverse_lerp_rejects_degenerate_range()
   )
 end
 
+-- utils.wrap()
+function TestUtils.test_wrap_inside_range()
+  luaunit.assert_equals(utils.wrap(32, 23, 42), 32)
+end
+
+function TestUtils.test_wrap_endpoints()
+  luaunit.assert_equals(utils.wrap(23, 23, 42), 23)
+  luaunit.assert_equals(utils.wrap(42, 23, 42), 23)
+end
+
+function TestUtils.test_wrap_outside_range()
+  luaunit.assert_equals(utils.wrap(20, 23, 42), 39)
+  luaunit.assert_equals(utils.wrap(45, 23, 42), 26)
+  luaunit.assert_equals(utils.wrap(1, 23, 42), 39)
+  luaunit.assert_equals(utils.wrap(64, 23, 42), 26)
+end
+
+function TestUtils.test_wrap_rejects_degenerate_range()
+  luaunit.assert_error_msg_contains(
+    "`minimum` must be less than `maximum`",
+    function()
+      utils.wrap(23, 23, 23)
+    end
+  )
+end
+
+function TestUtils.test_wrap_rejects_inverted_range()
+  luaunit.assert_error_msg_contains(
+    "`minimum` must be less than `maximum`",
+    function()
+      utils.wrap(23, 42, 23)
+    end
+  )
+end
+
 -- utils.random_in_range()
 function TestUtils.test_random_in_range()
   math.randomseed(1)
