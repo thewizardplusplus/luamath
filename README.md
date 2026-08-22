@@ -71,4 +71,4 @@ $ luarocks install luamath
 
 The MIT License (MIT)
 
-Copyright &copy; 2025 thewizardplusplus
+Copyright &copy; 2025-2026 thewizardplusplus
