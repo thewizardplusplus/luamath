@@ -4,6 +4,7 @@ local json = require("luaserialization.json")
 local BoundingBox = require("luamath.models.boundingbox")
 local Vector2D = require("luamath.vector2d")
 local Size = require("luamath.models.size")
+local Range = require("luamath.models.range")
 
 -- luacheck: globals TestBoundingBox
 TestBoundingBox = {}
@@ -77,6 +78,16 @@ function TestBoundingBox.test_from_position_and_size_invalid()
       BoundingBox.from_position_and_size(position, size)
     end
   )
+end
+
+-- BoundingBox.static.from_ranges()
+function TestBoundingBox.test_from_ranges()
+  local result = BoundingBox.from_ranges(Range:new(2, 7), Range:new(3, 11))
+
+  luaunit.assert_equals(result, BoundingBox:new(
+    Vector2D:new(2, 3),
+    Vector2D:new(7, 11)
+  ))
 end
 
 -- BoundingBox.static.union()
@@ -399,6 +410,14 @@ function TestBoundingBox.test_size()
   luaunit.assert_equals(result, Size:new(5, 8))
 end
 
+-- BoundingBox:x_range() and BoundingBox:y_range()
+function TestBoundingBox.test_axis_ranges()
+  local box = BoundingBox:new(Vector2D:new(2, 3), Vector2D:new(7, 11))
+
+  luaunit.assert_equals(box:x_range(), Range:new(2, 7))
+  luaunit.assert_equals(box:y_range(), Range:new(3, 11))
+end
+
 -- BoundingBox:center()
 function TestBoundingBox.test_center()
   local box = BoundingBox:new(Vector2D:new(2, 4), Vector2D:new(8, 10))
@@ -532,6 +551,80 @@ function TestBoundingBox.test_contains_box_false()
   local result = box:contains(other_box)
 
   luaunit.assert_false(result)
+end
+
+-- BoundingBox vector value operations
+function TestBoundingBox.test_clamp()
+  local box = BoundingBox:new(Vector2D:new(2, 3), Vector2D:new(7, 11))
+
+  luaunit.assert_equals(box:clamp(Vector2D:new(1, 12)), Vector2D:new(2, 11))
+  luaunit.assert_equals(box:clamp(Vector2D:new(4, 8)), Vector2D:new(4, 8))
+end
+
+function TestBoundingBox.test_lerp()
+  local box = BoundingBox:new(Vector2D:new(2, 3), Vector2D:new(7, 11))
+
+  luaunit.assert_equals(box:lerp(Vector2D:new(0.4, 0.75)), Vector2D:new(4, 9))
+  luaunit.assert_equals(box:lerp(Vector2D:new(-1, 2)), Vector2D:new(-3, 19))
+end
+
+function TestBoundingBox.test_inverse_lerp()
+  local box = BoundingBox:new(Vector2D:new(2, 3), Vector2D:new(7, 11))
+
+  luaunit.assert_equals(
+    box:inverse_lerp(Vector2D:new(4, 9)),
+    Vector2D:new(0.4, 0.75)
+  )
+  luaunit.assert_equals(
+    box:inverse_lerp(Vector2D:new(-3, 19)),
+    Vector2D:new(-1, 2)
+  )
+end
+
+function TestBoundingBox.test_inverse_lerp_rejects_degenerate_axis()
+  luaunit.assert_error_msg_contains(
+    "cannot inverse lerp a bounding box with a degenerate axis",
+    function()
+      BoundingBox:new(Vector2D:new(2, 3), Vector2D:new(2, 11))
+        :inverse_lerp(Vector2D:new(2, 9))
+    end
+  )
+end
+
+function TestBoundingBox.test_wrap()
+  local box = BoundingBox:new(Vector2D:new(2, 3), Vector2D:new(7, 11))
+
+  luaunit.assert_equals(box:wrap(Vector2D:new(8, 1)), Vector2D:new(3, 9))
+  luaunit.assert_equals(box:wrap(Vector2D:new(7, 11)), Vector2D:new(2, 3))
+end
+
+function TestBoundingBox.test_wrap_rejects_degenerate_axis()
+  luaunit.assert_error_msg_contains(
+    "cannot wrap in a bounding box with a degenerate axis",
+    function()
+      BoundingBox:new(Vector2D:new(2, 3), Vector2D:new(7, 3))
+        :wrap(Vector2D:new(4, 3))
+    end
+  )
+end
+
+function TestBoundingBox.test_random()
+  local box = BoundingBox:new(Vector2D:new(2, 3), Vector2D:new(7, 11))
+  for _ = 1, 100 do
+    local result = box:random()
+
+    luaunit.assert_true(result.x >= box.min.x and result.x < box.max.x)
+    luaunit.assert_true(result.y >= box.min.y and result.y < box.max.y)
+  end
+end
+
+function TestBoundingBox.test_random_rejects_degenerate_axis()
+  luaunit.assert_error_msg_contains(
+    "cannot generate a random point in a bounding box with a degenerate axis",
+    function()
+      BoundingBox:new(Vector2D:new(2, 3), Vector2D:new(2, 11)):random()
+    end
+  )
 end
 
 -- BoundingBox:translate()

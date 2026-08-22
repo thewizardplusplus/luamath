@@ -12,6 +12,7 @@ local Nameable = require("luaserialization.nameable")
 local Stringifiable = require("luaserialization.stringifiable")
 local Vector2D = require("luamath.vector2d")
 local Size = require("luamath.models.size")
+local Range = require("luamath.models.range")
 local utils = require("luamath.utils")
 
 local BoundingBox = middleclass("BoundingBox")
@@ -56,6 +57,22 @@ function BoundingBox.static.from_position_and_size(position, size)
   assertions.is_instance(size, Size)
 
   return BoundingBox:new(position, position + size)
+end
+
+---
+-- @function from_ranges
+-- @static
+-- @tparam Range x_range horizontal range
+-- @tparam Range y_range vertical range
+-- @treturn BoundingBox
+function BoundingBox.static.from_ranges(x_range, y_range)
+  assertions.is_instance(x_range, Range)
+  assertions.is_instance(y_range, Range)
+
+  return BoundingBox:new(
+    Vector2D:new(x_range.min, y_range.min),
+    Vector2D:new(x_range.max, y_range.max)
+  )
 end
 
 ---
@@ -292,6 +309,18 @@ function BoundingBox:size()
 end
 
 ---
+-- @treturn Range horizontal range
+function BoundingBox:x_range()
+  return Range:new(self.min.x, self.max.x)
+end
+
+---
+-- @treturn Range vertical range
+function BoundingBox:y_range()
+  return Range:new(self.min.y, self.max.y)
+end
+
+---
 -- @treturn Vector2D center of the box
 function BoundingBox:center()
   return (self.min + self.max) / 2
@@ -354,6 +383,79 @@ function BoundingBox:contains(value)
     return self.min.x <= value.min.x and self.max.x >= value.max.x
       and self.min.y <= value.min.y and self.max.y >= value.max.y
   end
+end
+
+---
+-- @tparam Vector2D value
+-- @treturn Vector2D value clamped independently on each axis
+function BoundingBox:clamp(value)
+  assertions.is_instance(value, Vector2D)
+
+  return Vector2D:new(
+    self:x_range():clamp(value.x),
+    self:y_range():clamp(value.y)
+  )
+end
+
+---
+-- @tparam Vector2D progress per-axis interpolation progress
+-- @treturn Vector2D
+function BoundingBox:lerp(progress)
+  assertions.is_instance(progress, Vector2D)
+
+  return Vector2D:new(
+    self:x_range():lerp(progress.x),
+    self:y_range():lerp(progress.y)
+  )
+end
+
+---
+-- @tparam Vector2D value
+-- @treturn Vector2D per-axis interpolation progress
+-- @raise error message if either axis is degenerate
+function BoundingBox:inverse_lerp(value)
+  assertions.is_instance(value, Vector2D)
+
+  if self:is_degenerate() then
+    error("cannot inverse lerp a bounding box with a degenerate axis")
+  end
+
+  return Vector2D:new(
+    self:x_range():inverse_lerp(value.x),
+    self:y_range():inverse_lerp(value.y)
+  )
+end
+
+---
+-- @tparam Vector2D value
+-- @treturn Vector2D value wrapped independently into the half-open intervals
+--   `[min.x, max.x)` and `[min.y, max.y)`
+-- @raise error message if either axis is degenerate
+function BoundingBox:wrap(value)
+  assertions.is_instance(value, Vector2D)
+
+  if self:is_degenerate() then
+    error("cannot wrap in a bounding box with a degenerate axis")
+  end
+
+  return Vector2D:new(
+    self:x_range():wrap(value.x),
+    self:y_range():wrap(value.y)
+  )
+end
+
+---
+-- @treturn Vector2D random value in the half-open intervals
+--   `[min.x, max.x)` and `[min.y, max.y)`
+-- @raise error message if either axis is degenerate
+function BoundingBox:random()
+  if self:is_degenerate() then
+    local message =
+      "cannot generate a random point in a bounding box with a degenerate axis"
+    error(message)
+  end
+
+  return Vector2D:new(self:x_range():random(), self:y_range():random())
 end
 
 ---
