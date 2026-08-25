@@ -7,6 +7,21 @@ local utils = {}
 
 ---
 -- @tparam number value
+-- @treturn int -1 for a negative value, 0 for zero, or 1 for a positive value
+function utils.sign(value)
+  assertions.is_number(value)
+
+  if value < 0 then
+    return -1
+  elseif value > 0 then
+    return 1
+  end
+
+  return 0
+end
+
+---
+-- @tparam number value
 -- @tparam[opt=0] int precision number of decimal places; negative values round
 --   to places before the decimal point (e.g., `-2` rounds to hundreds)
 -- @treturn number

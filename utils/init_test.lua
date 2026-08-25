@@ -5,6 +5,19 @@ local utils = require("luamath.utils")
 -- luacheck: globals TestUtils
 TestUtils = {}
 
+-- utils.sign()
+function TestUtils.test_sign_negative()
+  luaunit.assert_equals(utils.sign(-23), -1)
+end
+
+function TestUtils.test_sign_zero()
+  luaunit.assert_equals(utils.sign(0), 0)
+end
+
+function TestUtils.test_sign_positive()
+  luaunit.assert_equals(utils.sign(42), 1)
+end
+
 -- utils.round()
 function TestUtils.test_round_to_integer_by_default()
   luaunit.assert_equals(utils.round(23.4), 23)

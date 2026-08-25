@@ -13,6 +13,7 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
 ## Features
 
 - **Utility functions**:
+  - `sign(value)` — return the sign of a number
   - `round(value, [precision])` — round a number to the specified number of decimal places
   - `almost_equal(left_operand, right_operand, [epsilon])` — compare two numbers approximately
   - `clamp(value, minimum, maximum)` — clamp a number to a range
