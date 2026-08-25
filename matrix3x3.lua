@@ -222,6 +222,51 @@ function Matrix3x3:almost_equals(other, epsilon)
 end
 
 ---
+-- @treturn Matrix3x3
+-- @raise error message
+function Matrix3x3:inverse()
+  local element_11, element_12, element_13 =
+    self.elements[1][1], self.elements[1][2], self.elements[1][3]
+  local element_21, element_22, element_23 =
+    self.elements[2][1], self.elements[2][2], self.elements[2][3]
+  local element_31, element_32, element_33 =
+    self.elements[3][1], self.elements[3][2], self.elements[3][3]
+
+  -- first column of the adjugate matrix
+  local adjugate_element_11 = element_22 * element_33 - element_23 * element_32
+  local adjugate_element_21 = element_23 * element_31 - element_21 * element_33
+  local adjugate_element_31 = element_21 * element_32 - element_22 * element_31
+
+  local determinant =
+    element_11 * adjugate_element_11
+    + element_12 * adjugate_element_21
+    + element_13 * adjugate_element_31
+  if determinant == 0 then
+    error("matrix is singular")
+  end
+
+  local adjugate = Matrix3x3:new({
+    {
+      adjugate_element_11,
+      element_13 * element_32 - element_12 * element_33,
+      element_12 * element_23 - element_13 * element_22,
+    },
+    {
+      adjugate_element_21,
+      element_11 * element_33 - element_13 * element_31,
+      element_13 * element_21 - element_11 * element_23,
+    },
+    {
+      adjugate_element_31,
+      element_12 * element_31 - element_11 * element_32,
+      element_11 * element_22 - element_12 * element_21,
+    },
+  })
+
+  return adjugate:div(determinant)
+end
+
+---
 -- @tparam Matrix3x3 other
 -- @treturn Matrix3x3
 function Matrix3x3:add(other)

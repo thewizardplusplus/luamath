@@ -335,6 +335,53 @@ function TestMatrix3x3.test_almost_equals_false()
   luaunit.assert_false(result)
 end
 
+-- Matrix3x3:inverse()
+function TestMatrix3x3.test_inverse_with_unit_determinant()
+  local matrix = Matrix3x3:new({
+    {1, 2, 3},
+    {0, 1, 4},
+    {5, 6, 0},
+  })
+
+  local result = matrix:inverse()
+
+  luaunit.assert_equals(result, Matrix3x3:new({
+    {-24, 18, 5},
+    {20, -15, -4},
+    {-5, 4, 1},
+  }))
+  luaunit.assert_true((matrix * result):almost_equals(Matrix3x3.IDENTITY))
+end
+
+function TestMatrix3x3.test_inverse_with_non_unit_determinant()
+  local matrix = Matrix3x3:new({
+    {2, 0, 0},
+    {0, 4, 0},
+    {0, 0, 1},
+  })
+
+  local result = matrix:inverse()
+
+  luaunit.assert_equals(result, Matrix3x3:new({
+    {0.5, 0, 0},
+    {0, 0.25, 0},
+    {0, 0, 1},
+  }))
+  luaunit.assert_true((matrix * result):almost_equals(Matrix3x3.IDENTITY))
+end
+
+function TestMatrix3x3.test_inverse_rejects_singular_matrix()
+  local matrix = Matrix3x3:new({
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9},
+  })
+
+  luaunit.assert_error_msg_contains("matrix is singular", function()
+    matrix:inverse()
+  end)
+end
+
 -- Matrix3x3:add()
 function TestMatrix3x3.test_add_method()
   local matrix = Matrix3x3:new({

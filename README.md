@@ -69,6 +69,7 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
     - **Operations**:
       - `equals(other)` — check exact equality
       - `almost_equals(other, [epsilon])` — check approximate equality within a given epsilon
+      - `inverse()` — return the inverse matrix
       - `add(other)` — add another matrix
       - `sub(other)` — subtract another matrix
       - `mul(value)` — multiply by a scalar, vector, or another matrix
