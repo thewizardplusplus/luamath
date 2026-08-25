@@ -222,6 +222,32 @@ function Matrix3x3:almost_equals(other, epsilon)
 end
 
 ---
+-- @treturn Matrix3x3
+-- @raise error message
+function Matrix3x3:inverse()
+  local a, b, c =
+    self.elements[1][1], self.elements[1][2], self.elements[1][3]
+  local d, e, f =
+    self.elements[2][1], self.elements[2][2], self.elements[2][3]
+  local g, h, i =
+    self.elements[3][1], self.elements[3][2], self.elements[3][3]
+
+  local determinant =
+    a * (e * i - f * h)
+    - b * (d * i - f * g)
+    + c * (d * h - e * g)
+  if determinant == 0 then
+    error("matrix is singular")
+  end
+
+  return Matrix3x3:new({
+    {e * i - f * h, c * h - b * i, b * f - c * e},
+    {f * g - d * i, a * i - c * g, c * d - a * f},
+    {d * h - e * g, b * g - a * h, a * e - b * d},
+  }):div(determinant)
+end
+
+---
 -- @tparam Matrix3x3 other
 -- @treturn Matrix3x3
 function Matrix3x3:add(other)
