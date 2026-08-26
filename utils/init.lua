@@ -31,18 +31,18 @@ function utils.round(value, precision)
   assertions.is_number(value)
   assertions.is_integer(precision)
 
+  local value_sign = utils.sign(value)
   local factor = 10 ^ precision
   local scaled_value = value * factor
-  local scaled_value_sign = utils.sign(scaled_value)
 
   -- compare the fractional part instead of adding 0.5 before truncation;
   -- adding it can round values just below a half up and change large integral
   -- floating-point values; see https://github.com/golang/go/issues/20100
-  local rounded_value = scaled_value_sign >= 0
+  local rounded_value = value_sign >= 0
     and math.floor(scaled_value)
     or math.ceil(scaled_value)
   if math.abs(scaled_value - rounded_value) >= 0.5 then
-    rounded_value = rounded_value + scaled_value_sign
+    rounded_value = rounded_value + value_sign
   end
 
   local result = rounded_value / factor
