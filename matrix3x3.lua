@@ -232,18 +232,22 @@ function Matrix3x3:inverse()
   local g, h, i =
     self.elements[3][1], self.elements[3][2], self.elements[3][3]
 
+  local adjugate_11 = e * i - f * h
+  local adjugate_21 = f * g - d * i
+  local adjugate_31 = d * h - e * g
+
   local determinant =
-    a * (e * i - f * h)
-    - b * (d * i - f * g)
-    + c * (d * h - e * g)
+    a * adjugate_11
+    + b * adjugate_21
+    + c * adjugate_31
   if determinant == 0 then
     error("matrix is singular")
   end
 
   return Matrix3x3:new({
-    {e * i - f * h, c * h - b * i, b * f - c * e},
-    {f * g - d * i, a * i - c * g, c * d - a * f},
-    {d * h - e * g, b * g - a * h, a * e - b * d},
+    {adjugate_11, c * h - b * i, b * f - c * e},
+    {adjugate_21, a * i - c * g, c * d - a * f},
+    {adjugate_31, b * g - a * h, a * e - b * d},
   }):div(determinant)
 end
 
