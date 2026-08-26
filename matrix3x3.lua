@@ -232,6 +232,7 @@ function Matrix3x3:inverse()
   local g, h, i =
     self.elements[3][1], self.elements[3][2], self.elements[3][3]
 
+  -- first column of the adjugate matrix
   local adjugate_11 = e * i - f * h
   local adjugate_21 = f * g - d * i
   local adjugate_31 = d * h - e * g
