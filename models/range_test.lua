@@ -51,6 +51,18 @@ function TestRange.test_union_multiple_values()
   luaunit.assert_equals(result, Range:new(10, 60))
 end
 
+function TestRange.test_union_result_is_independent_from_inputs()
+  local range_one = Range:new(23, 42)
+  local range_two = Range:new(50, 60)
+  local range_three = Range:new(10, 30)
+  local result = Range.union(range_one, range_two, range_three)
+
+  range_two.max = 70
+  range_three.min = 5
+
+  luaunit.assert_equals(result, Range:new(10, 60))
+end
+
 function TestRange.test_union_no_values()
   luaunit.assert_error_msg_contains("at least one range required", function()
     Range.union()
@@ -64,6 +76,18 @@ function TestRange.test_intersection_multiple_values()
     Range:new(23, 42),
     Range:new(30, 60)
   )
+
+  luaunit.assert_equals(result, Range:new(30, 42))
+end
+
+function TestRange.test_intersection_result_is_independent_from_inputs()
+  local range_one = Range:new(10, 50)
+  local range_two = Range:new(23, 42)
+  local range_three = Range:new(30, 60)
+  local result = Range.intersection(range_one, range_two, range_three)
+
+  range_two.max = 40
+  range_three.min = 35
 
   luaunit.assert_equals(result, Range:new(30, 42))
 end
