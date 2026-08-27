@@ -245,11 +245,13 @@ function Matrix3x3:inverse()
     error("matrix is singular")
   end
 
-  return Matrix3x3:new({
+  local adjugate = Matrix3x3:new({
     {adjugate_11, c * h - b * i, b * f - c * e},
     {adjugate_21, a * i - c * g, c * d - a * f},
     {adjugate_31, b * g - a * h, a * e - b * d},
-  }):div(determinant)
+  })
+
+  return adjugate:div(determinant)
 end
 
 ---
