@@ -355,6 +355,23 @@ function TestMatrix3x3.test_inverse()
   luaunit.assert_true((matrix * result):almost_equals(Matrix3x3.IDENTITY))
 end
 
+function TestMatrix3x3.test_inverse_with_non_unit_determinant()
+  local matrix = Matrix3x3:new({
+    {2, 0, 0},
+    {0, 4, 0},
+    {0, 0, 1},
+  })
+
+  local result = matrix:inverse()
+
+  luaunit.assert_equals(result, Matrix3x3:new({
+    {0.5, 0, 0},
+    {0, 0.25, 0},
+    {0, 0, 1},
+  }))
+  luaunit.assert_true((matrix * result):almost_equals(Matrix3x3.IDENTITY))
+end
+
 function TestMatrix3x3.test_inverse_rejects_singular_matrix()
   local matrix = Matrix3x3:new({
     {1, 2, 3},
