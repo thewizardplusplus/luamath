@@ -113,6 +113,24 @@ function TestMatrix3x3.test_new()
   })
 end
 
+function TestMatrix3x3.test_new_copies_elements()
+  local elements = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9},
+  }
+  local matrix = Matrix3x3:new(elements)
+
+  elements[1][1] = 10
+  elements[2] = {40, 50, 60}
+
+  luaunit.assert_equals(matrix.elements, {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9},
+  })
+end
+
 function TestMatrix3x3.test_new_with_wrong_row_count()
   luaunit.assert_error_msg_contains(
     "`elements` must contain exactly three rows",

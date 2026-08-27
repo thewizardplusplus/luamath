@@ -182,6 +182,18 @@ function TestBoundingBox.test_new_valid()
   luaunit.assert_equals(result.max, max)
 end
 
+function TestBoundingBox.test_new_copies_corners()
+  local min = Vector2D:new(1, 2)
+  local max = Vector2D:new(5, 6)
+  local box = BoundingBox:new(min, max)
+
+  min.x = 10
+  max.y = 60
+
+  luaunit.assert_equals(box.min, Vector2D:new(1, 2))
+  luaunit.assert_equals(box.max, Vector2D:new(5, 6))
+end
+
 function TestBoundingBox.test_new_invalid()
   local min = Vector2D:new(10, 10)
   local max = Vector2D:new(5, 6)

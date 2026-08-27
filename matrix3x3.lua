@@ -153,7 +153,12 @@ function Matrix3x3:initialize(elements)
     end
   end
 
-  self.elements = elements
+  -- A matrix is a value object. Keep its state independent from the mutable
+  -- tables supplied by the caller.
+  self.elements = {}
+  for row_index, row in ipairs(elements) do
+    self.elements[row_index] = {row[1], row[2], row[3]}
+  end
 end
 
 ---
