@@ -55,6 +55,23 @@ function TestBoundingBox.test_from_json_error()
   )
 end
 
+-- BoundingBox.static.from_options()
+function TestBoundingBox.test_from_options_copies_corners()
+  local options = {
+    min = Vector2D:new(2, 3),
+    max = Vector2D:new(7, 11),
+  }
+  local box = BoundingBox.from_options(options)
+
+  options.min.x = 20
+  options.max.y = 110
+
+  luaunit.assert_equals(box, BoundingBox:new(
+    Vector2D:new(2, 3),
+    Vector2D:new(7, 11)
+  ))
+end
+
 -- BoundingBox.static.from_position_and_size()
 function TestBoundingBox.test_from_position_and_size_valid()
   local position = Vector2D:new(10, 20)
@@ -63,6 +80,20 @@ function TestBoundingBox.test_from_position_and_size_valid()
   local result = BoundingBox.from_position_and_size(position, size)
 
   luaunit.assert_equals(result, BoundingBox:new(
+    Vector2D:new(10, 20),
+    Vector2D:new(40, 60)
+  ))
+end
+
+function TestBoundingBox.test_from_position_and_size_copies_inputs()
+  local position = Vector2D:new(10, 20)
+  local size = Size:new(30, 40)
+  local box = BoundingBox.from_position_and_size(position, size)
+
+  position.x = 100
+  size.height = 400
+
+  luaunit.assert_equals(box, BoundingBox:new(
     Vector2D:new(10, 20),
     Vector2D:new(40, 60)
   ))
@@ -90,6 +121,20 @@ function TestBoundingBox.test_from_ranges()
   ))
 end
 
+function TestBoundingBox.test_from_ranges_copies_inputs()
+  local x_range = Range:new(2, 7)
+  local y_range = Range:new(3, 11)
+  local box = BoundingBox.from_ranges(x_range, y_range)
+
+  x_range.min = 1
+  y_range.max = 12
+
+  luaunit.assert_equals(box, BoundingBox:new(
+    Vector2D:new(2, 3),
+    Vector2D:new(7, 11)
+  ))
+end
+
 -- BoundingBox.static.union()
 function TestBoundingBox.test_union_multiple_values()
   local box_one = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(2, 2))
@@ -100,6 +145,20 @@ function TestBoundingBox.test_union_multiple_values()
 
   luaunit.assert_equals(result, BoundingBox:new(
     Vector2D:new(-1, -2),
+    Vector2D:new(5, 4)
+  ))
+end
+
+function TestBoundingBox.test_union_copies_inputs()
+  local box_one = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(2, 2))
+  local box_two = BoundingBox:new(Vector2D:new(3, 1), Vector2D:new(5, 4))
+  local result = BoundingBox.union(box_one, box_two)
+
+  box_one.min.x = -1
+  box_two.max.y = 5
+
+  luaunit.assert_equals(result, BoundingBox:new(
+    Vector2D:new(0, 0),
     Vector2D:new(5, 4)
   ))
 end
@@ -124,6 +183,20 @@ function TestBoundingBox.test_intersection_multiple_values()
   luaunit.assert_equals(result, BoundingBox:new(
     Vector2D:new(3, 2),
     Vector2D:new(4, 4)
+  ))
+end
+
+function TestBoundingBox.test_intersection_copies_inputs()
+  local box_one = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(5, 5))
+  local box_two = BoundingBox:new(Vector2D:new(2, 1), Vector2D:new(6, 4))
+  local result = BoundingBox.intersection(box_one, box_two)
+
+  box_one.max.x = 4
+  box_two.min.y = 2
+
+  luaunit.assert_equals(result, BoundingBox:new(
+    Vector2D:new(2, 1),
+    Vector2D:new(5, 4)
   ))
 end
 

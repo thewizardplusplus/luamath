@@ -53,6 +53,27 @@ function TestMatrix3x3.test_from_json_error()
   )
 end
 
+-- Matrix3x3.static.from_options()
+function TestMatrix3x3.test_from_options_copies_elements()
+  local options = {
+    elements = {
+      {1, 2, 3},
+      {4, 5, 6},
+      {7, 8, 9},
+    },
+  }
+  local matrix = Matrix3x3.from_options(options)
+
+  options.elements[1][1] = 10
+  options.elements[2] = {40, 50, 60}
+
+  luaunit.assert_equals(matrix.elements, {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9},
+  })
+end
+
 -- Matrix3x3.static.translate()
 function TestMatrix3x3.test_translate()
   local result = Matrix3x3.translate(5, 7)
