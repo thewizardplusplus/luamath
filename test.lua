@@ -13,6 +13,7 @@ for _, module in ipairs({
   "models.size",
   "models.boundingbox",
   "models.range",
+  "models.color",
 }) do
   require("luamath." .. module .. "_test")
 end

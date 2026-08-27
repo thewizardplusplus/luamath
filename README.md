@@ -177,6 +177,34 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
         - `scale(scale_x, scale_y)` — scale the box around its center
       - **Operators (via metamethods)**:
         - `==` — check exact equality (`__eq()`)
+    - `Color` — an RGBA color with finite non-negative color channels and normalized alpha:
+      - **Serialization**:
+        - `schema()` — return the JSON Schema for the class
+        - `from_options(options)` — construct a color from a table
+        - `__data()` — return a table with the instance fields
+        - `__tostring()` — return a string representation of the instance
+      - **Constants**:
+        - `TRANSPARENT` — (0, 0, 0, 0)
+        - `BLACK` — (0, 0, 0, 1)
+        - `WHITE` — (1, 1, 1, 1)
+        - `RED` — (1, 0, 0, 1)
+        - `GREEN` — (0, 1, 0, 1)
+        - `BLUE` — (0, 0, 1, 1)
+      - **Factories**:
+        - `from_bytes(red, green, blue, [alpha])` — construct a color from byte channels
+        - `from_hex(value)` — construct a color from hexadecimal notation
+      - **Operations**:
+        - `equals(other)` — check exact equality
+        - `almost_equals(other, [epsilon])` — check approximate equality within a given epsilon
+        - `is_valid()` — check that the color channels are finite and non-negative and alpha is normalized
+        - `channels([include_alpha])` — return the color channels in RGB or RGBA order
+        - `byte_channel(channel)` — return a selected channel as a clamped byte
+        - `byte_channels([include_alpha])` — return the color channels as clamped bytes in RGB or RGBA order
+        - `with_alpha(alpha)` — return a copy with the specified alpha
+        - `clamped()` — return a copy with every channel clamped to the normalized range
+        - `to_hex([include_alpha])` — return the color in hexadecimal notation
+      - **Operators (via metamethods)**:
+        - `==` — check exact equality (`__eq()`)
 
 ## Installation
 
