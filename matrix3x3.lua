@@ -147,13 +147,15 @@ function Matrix3x3:initialize(elements)
   if #elements ~= 3 then
     error("`elements` must contain exactly three rows")
   end
-  for _, row in ipairs(elements) do
+
+  self.elements = {}
+  for index, row in ipairs(elements) do
     if #row ~= 3 then
       error("each row of `elements` must contain exactly three elements")
     end
-  end
 
-  self.elements = elements
+    self.elements[index] = {row[1], row[2], row[3]}
+  end
 end
 
 ---

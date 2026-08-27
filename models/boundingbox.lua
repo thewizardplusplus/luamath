@@ -177,8 +177,8 @@ function BoundingBox:initialize(min, max)
   assertions.is_instance(min, Vector2D)
   assertions.is_instance(max, Vector2D)
 
-  self.min = min
-  self.max = max
+  self.min = Vector2D:new(min.x, min.y)
+  self.max = Vector2D:new(max.x, max.y)
 
   if not self:is_valid() then
     error("`min` must be at most `max` on each axis")

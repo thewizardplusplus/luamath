@@ -42,11 +42,20 @@ end
 
 -- Range.union()
 function TestRange.test_union_multiple_values()
-  local result = Range.union(
-    Range:new(23, 42),
-    Range:new(50, 60),
-    Range:new(10, 30)
-  )
+  local range_one, range_two, range_three =
+    Range:new(23, 42), Range:new(50, 60), Range:new(10, 30)
+  local result = Range.union(range_one, range_two, range_three)
+
+  luaunit.assert_equals(result, Range:new(10, 60))
+end
+
+function TestRange.test_union_copies_inputs()
+  local range_one, range_two, range_three =
+    Range:new(23, 42), Range:new(50, 60), Range:new(10, 30)
+  local result = Range.union(range_one, range_two, range_three)
+
+  range_two.max = 70
+  range_three.min = 5
 
   luaunit.assert_equals(result, Range:new(10, 60))
 end
@@ -59,11 +68,20 @@ end
 
 -- Range.intersection()
 function TestRange.test_intersection_multiple_values()
-  local result = Range.intersection(
-    Range:new(10, 50),
-    Range:new(23, 42),
-    Range:new(30, 60)
-  )
+  local range_one, range_two, range_three =
+    Range:new(10, 50), Range:new(23, 42), Range:new(30, 60)
+  local result = Range.intersection(range_one, range_two, range_three)
+
+  luaunit.assert_equals(result, Range:new(30, 42))
+end
+
+function TestRange.test_intersection_copies_inputs()
+  local range_one, range_two, range_three =
+    Range:new(10, 50), Range:new(23, 42), Range:new(30, 60)
+  local result = Range.intersection(range_one, range_two, range_three)
+
+  range_two.max = 40
+  range_three.min = 35
 
   luaunit.assert_equals(result, Range:new(30, 42))
 end

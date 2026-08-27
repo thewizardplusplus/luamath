@@ -55,11 +55,23 @@ function TestBoundingBox.test_from_json_error()
   )
 end
 
+-- BoundingBox.static.from_options()
+function TestBoundingBox.test_from_options_copies_inputs()
+  local options = { min = Vector2D:new(2, 3), max = Vector2D:new(7, 11) }
+  local result = BoundingBox.from_options(options)
+
+  options.min.x = 20
+  options.max.y = 110
+
+  luaunit.assert_equals(result, BoundingBox:new(
+    Vector2D:new(2, 3),
+    Vector2D:new(7, 11)
+  ))
+end
+
 -- BoundingBox.static.from_position_and_size()
 function TestBoundingBox.test_from_position_and_size_valid()
-  local position = Vector2D:new(10, 20)
-  local size = Size:new(30, 40)
-
+  local position, size = Vector2D:new(10, 20), Size:new(30, 40)
   local result = BoundingBox.from_position_and_size(position, size)
 
   luaunit.assert_equals(result, BoundingBox:new(
@@ -68,9 +80,21 @@ function TestBoundingBox.test_from_position_and_size_valid()
   ))
 end
 
+function TestBoundingBox.test_from_position_and_size_copies_inputs()
+  local position, size = Vector2D:new(10, 20), Size:new(30, 40)
+  local result = BoundingBox.from_position_and_size(position, size)
+
+  position.x = 100
+  size.height = 400
+
+  luaunit.assert_equals(result, BoundingBox:new(
+    Vector2D:new(10, 20),
+    Vector2D:new(40, 60)
+  ))
+end
+
 function TestBoundingBox.test_from_position_and_size_invalid()
-  local position = Vector2D:new(10, 20)
-  local size = Size:new(-30, -40)
+  local position, size = Vector2D:new(10, 20), Size:new(-30, -40)
 
   luaunit.assert_error_msg_contains(
     "`min` must be at most `max` on each axis",
@@ -82,7 +106,21 @@ end
 
 -- BoundingBox.static.from_ranges()
 function TestBoundingBox.test_from_ranges()
-  local result = BoundingBox.from_ranges(Range:new(2, 7), Range:new(3, 11))
+  local x_range, y_range = Range:new(2, 7), Range:new(3, 11)
+  local result = BoundingBox.from_ranges(x_range, y_range)
+
+  luaunit.assert_equals(result, BoundingBox:new(
+    Vector2D:new(2, 3),
+    Vector2D:new(7, 11)
+  ))
+end
+
+function TestBoundingBox.test_from_ranges_copies_inputs()
+  local x_range, y_range = Range:new(2, 7), Range:new(3, 11)
+  local result = BoundingBox.from_ranges(x_range, y_range)
+
+  x_range.min = 1
+  y_range.max = 12
 
   luaunit.assert_equals(result, BoundingBox:new(
     Vector2D:new(2, 3),
@@ -100,6 +138,21 @@ function TestBoundingBox.test_union_multiple_values()
 
   luaunit.assert_equals(result, BoundingBox:new(
     Vector2D:new(-1, -2),
+    Vector2D:new(5, 4)
+  ))
+end
+
+function TestBoundingBox.test_union_copies_inputs()
+  local box_one = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(2, 2))
+  local box_two = BoundingBox:new(Vector2D:new(3, 1), Vector2D:new(5, 4))
+
+  local result = BoundingBox.union(box_one, box_two)
+
+  box_one.min.x = -1
+  box_two.max.y = 5
+
+  luaunit.assert_equals(result, BoundingBox:new(
+    Vector2D:new(0, 0),
     Vector2D:new(5, 4)
   ))
 end
@@ -124,6 +177,21 @@ function TestBoundingBox.test_intersection_multiple_values()
   luaunit.assert_equals(result, BoundingBox:new(
     Vector2D:new(3, 2),
     Vector2D:new(4, 4)
+  ))
+end
+
+function TestBoundingBox.test_intersection_copies_inputs()
+  local box_one = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(5, 5))
+  local box_two = BoundingBox:new(Vector2D:new(2, 1), Vector2D:new(6, 4))
+
+  local result = BoundingBox.intersection(box_one, box_two)
+
+  box_one.max.x = 4
+  box_two.min.y = 2
+
+  luaunit.assert_equals(result, BoundingBox:new(
+    Vector2D:new(2, 1),
+    Vector2D:new(5, 4)
   ))
 end
 
@@ -172,9 +240,7 @@ end
 
 -- BoundingBox:new()
 function TestBoundingBox.test_new_valid()
-  local min = Vector2D:new(1, 2)
-  local max = Vector2D:new(5, 6)
-
+  local min, max = Vector2D:new(1, 2), Vector2D:new(5, 6)
   local result = BoundingBox:new(min, max)
 
   luaunit.assert_true(checks.is_instance(result, BoundingBox))
@@ -182,9 +248,20 @@ function TestBoundingBox.test_new_valid()
   luaunit.assert_equals(result.max, max)
 end
 
+function TestBoundingBox.test_new_copies_inputs()
+  local min, max = Vector2D:new(1, 2), Vector2D:new(5, 6)
+  local result = BoundingBox:new(min, max)
+
+  min.x = 10
+  max.y = 60
+
+  luaunit.assert_true(checks.is_instance(result, BoundingBox))
+  luaunit.assert_equals(result.min, Vector2D:new(1, 2))
+  luaunit.assert_equals(result.max, Vector2D:new(5, 6))
+end
+
 function TestBoundingBox.test_new_invalid()
-  local min = Vector2D:new(10, 10)
-  local max = Vector2D:new(5, 6)
+  local min, max = Vector2D:new(10, 10), Vector2D:new(5, 6)
 
   luaunit.assert_error_msg_contains(
     "`min` must be at most `max` on each axis",
