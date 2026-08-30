@@ -152,7 +152,9 @@ end
 -- @tparam Range other
 -- @treturn boolean
 function Range:equals(other)
-  assertions.is_instance(other, Range)
+  if not checks.is_instance(other, Range) then
+    return false
+  end
 
   return self.min == other.min and self.max == other.max
 end
@@ -162,8 +164,12 @@ end
 -- @tparam Range right_operand
 -- @treturn boolean
 function Range.__eq(left_operand, right_operand)
-  assertions.is_instance(left_operand, Range)
-  assertions.is_instance(right_operand, Range)
+  if
+    not checks.is_instance(left_operand, Range)
+      or not checks.is_instance(right_operand, Range)
+  then
+    return false
+  end
 
   return left_operand:equals(right_operand)
 end
@@ -175,8 +181,11 @@ end
 function Range:almost_equals(other, epsilon)
   epsilon = epsilon or 1e-6
 
-  assertions.is_instance(other, Range)
   assertions.is_number(epsilon)
+
+  if not checks.is_instance(other, Range) then
+    return false
+  end
 
   return utils.almost_equal(self.min, other.min, epsilon)
     and utils.almost_equal(self.max, other.max, epsilon)

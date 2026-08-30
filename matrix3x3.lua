@@ -174,7 +174,9 @@ end
 -- @tparam Matrix3x3 other
 -- @treturn boolean
 function Matrix3x3:equals(other)
-  assertions.is_instance(other, Matrix3x3)
+  if not checks.is_instance(other, Matrix3x3) then
+    return false
+  end
 
   for row = 1, 3 do
     for column = 1, 3 do
@@ -192,8 +194,12 @@ end
 -- @tparam Matrix3x3 right_operand
 -- @treturn boolean
 function Matrix3x3.__eq(left_operand, right_operand)
-  assertions.is_instance(left_operand, Matrix3x3)
-  assertions.is_instance(right_operand, Matrix3x3)
+  if
+    not checks.is_instance(left_operand, Matrix3x3)
+      or not checks.is_instance(right_operand, Matrix3x3)
+  then
+    return false
+  end
 
   return left_operand:equals(right_operand)
 end
@@ -205,8 +211,11 @@ end
 function Matrix3x3:almost_equals(other, epsilon)
   epsilon = epsilon or 1e-6
 
-  assertions.is_instance(other, Matrix3x3)
   assertions.is_number(epsilon)
+
+  if not checks.is_instance(other, Matrix3x3) then
+    return false
+  end
 
   for row = 1, 3 do
     for column = 1, 3 do

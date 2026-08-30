@@ -1,7 +1,23 @@
 local luaunit = require("luaunit")
+local middleclass = require("middleclass")
+local assertions = require("luatypechecks.assertions")
 local checks = require("luatypechecks.checks")
 local json = require("luaserialization.json")
 local Range = require("luamath.models.range")
+
+local Object = middleclass("Object")
+
+function Object:initialize(id)
+  assertions.is_number(id)
+
+  self.id = id
+end
+
+local AlwaysEqualObject = middleclass("AlwaysEqualObject", Object)
+
+function AlwaysEqualObject.__eq()
+  return true
+end
 
 -- luacheck: globals TestRange
 TestRange = {}
@@ -157,6 +173,32 @@ function TestRange.test_almost_equals()
 
   luaunit.assert_true(range:almost_equals(Range:new(23, 42)))
   luaunit.assert_false(range:almost_equals(Range:new(23, 42), 1e-12))
+end
+
+function TestRange.test_incompatible_comparisons()
+  local range = Range:new(23, 42)
+
+  luaunit.assert_false(range:equals(nil))
+  luaunit.assert_false(range:almost_equals(nil))
+  luaunit.assert_false(Range.__eq(range, nil))
+  luaunit.assert_false(Range.__eq(nil, range))
+
+  local incompatible_values = {
+    1,
+    "value",
+    {},
+    Object:new(1),
+    AlwaysEqualObject:new(2),
+  }
+  for _, value in ipairs(incompatible_values) do
+    luaunit.assert_false(range:equals(value))
+    luaunit.assert_false(range:almost_equals(value))
+    luaunit.assert_false(Range.__eq(range, value))
+    luaunit.assert_false(Range.__eq(value, range))
+  end
+
+  luaunit.assert_false(range == {})
+  luaunit.assert_false({} == range)
 end
 
 -- Range properties

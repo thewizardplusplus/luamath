@@ -1,8 +1,24 @@
 local luaunit = require("luaunit")
+local middleclass = require("middleclass")
+local assertions = require("luatypechecks.assertions")
 local checks = require("luatypechecks.checks")
 local json = require("luaserialization.json")
 local Vector2D = require("luamath.vector2d")
 local Matrix3x3 = require("luamath.matrix3x3")
+
+local Object = middleclass("Object")
+
+function Object:initialize(id)
+  assertions.is_number(id)
+
+  self.id = id
+end
+
+local AlwaysEqualObject = middleclass("AlwaysEqualObject", Object)
+
+function AlwaysEqualObject.__eq()
+  return true
+end
 
 -- luacheck: globals TestVector2D
 TestVector2D = {}
@@ -143,6 +159,32 @@ function TestVector2D.test_almost_equals_false()
   local result = vector:almost_equals(other_vector, 1e-12)
 
   luaunit.assert_false(result)
+end
+
+function TestVector2D.test_incompatible_comparisons()
+  local vector = Vector2D:new(1, 2)
+
+  luaunit.assert_false(vector:equals(nil))
+  luaunit.assert_false(vector:almost_equals(nil))
+  luaunit.assert_false(Vector2D.__eq(vector, nil))
+  luaunit.assert_false(Vector2D.__eq(nil, vector))
+
+  local incompatible_values = {
+    1,
+    "value",
+    {},
+    Object:new(1),
+    AlwaysEqualObject:new(2),
+  }
+  for _, value in ipairs(incompatible_values) do
+    luaunit.assert_false(vector:equals(value))
+    luaunit.assert_false(vector:almost_equals(value))
+    luaunit.assert_false(Vector2D.__eq(vector, value))
+    luaunit.assert_false(Vector2D.__eq(value, vector))
+  end
+
+  luaunit.assert_false(vector == {})
+  luaunit.assert_false({} == vector)
 end
 
 -- Vector2D:length()

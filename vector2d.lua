@@ -81,7 +81,9 @@ end
 -- @tparam Vector2D other
 -- @treturn boolean
 function Vector2D:equals(other)
-  assertions.is_instance(other, Vector2D)
+  if not checks.is_instance(other, Vector2D) then
+    return false
+  end
 
   return self.x == other.x and self.y == other.y
 end
@@ -91,8 +93,12 @@ end
 -- @tparam Vector2D right_operand
 -- @treturn boolean
 function Vector2D.__eq(left_operand, right_operand)
-  assertions.is_instance(left_operand, Vector2D)
-  assertions.is_instance(right_operand, Vector2D)
+  if
+    not checks.is_instance(left_operand, Vector2D)
+      or not checks.is_instance(right_operand, Vector2D)
+  then
+    return false
+  end
 
   return left_operand:equals(right_operand)
 end
@@ -104,8 +110,11 @@ end
 function Vector2D:almost_equals(other, epsilon)
   epsilon = epsilon or 1e-6
 
-  assertions.is_instance(other, Vector2D)
   assertions.is_number(epsilon)
+
+  if not checks.is_instance(other, Vector2D) then
+    return false
+  end
 
   return utils.almost_equal(self.x, other.x, epsilon)
     and utils.almost_equal(self.y, other.y, epsilon)

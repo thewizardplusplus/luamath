@@ -1,10 +1,26 @@
 local luaunit = require("luaunit")
+local middleclass = require("middleclass")
+local assertions = require("luatypechecks.assertions")
 local checks = require("luatypechecks.checks")
 local json = require("luaserialization.json")
 local BoundingBox = require("luamath.models.boundingbox")
 local Vector2D = require("luamath.vector2d")
 local Size = require("luamath.models.size")
 local Range = require("luamath.models.range")
+
+local Object = middleclass("Object")
+
+function Object:initialize(id)
+  assertions.is_number(id)
+
+  self.id = id
+end
+
+local AlwaysEqualObject = middleclass("AlwaysEqualObject", Object)
+
+function AlwaysEqualObject.__eq()
+  return true
+end
 
 -- luacheck: globals TestBoundingBox
 TestBoundingBox = {}
@@ -381,6 +397,32 @@ function TestBoundingBox.test_almost_equals_false()
   local result = box:almost_equals(other_box, 1e-12)
 
   luaunit.assert_false(result)
+end
+
+function TestBoundingBox.test_incompatible_comparisons()
+  local box = BoundingBox:new(Vector2D:new(1, 2), Vector2D:new(3, 4))
+
+  luaunit.assert_false(box:equals(nil))
+  luaunit.assert_false(box:almost_equals(nil))
+  luaunit.assert_false(BoundingBox.__eq(box, nil))
+  luaunit.assert_false(BoundingBox.__eq(nil, box))
+
+  local incompatible_values = {
+    1,
+    "value",
+    {},
+    Object:new(1),
+    AlwaysEqualObject:new(2),
+  }
+  for _, value in ipairs(incompatible_values) do
+    luaunit.assert_false(box:equals(value))
+    luaunit.assert_false(box:almost_equals(value))
+    luaunit.assert_false(BoundingBox.__eq(box, value))
+    luaunit.assert_false(BoundingBox.__eq(value, box))
+  end
+
+  luaunit.assert_false(box == {})
+  luaunit.assert_false({} == box)
 end
 
 -- BoundingBox:is_valid()
