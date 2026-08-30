@@ -202,7 +202,9 @@ end
 -- @tparam BoundingBox other
 -- @treturn boolean
 function BoundingBox:equals(other)
-  assertions.is_instance(other, BoundingBox)
+  if not checks.is_instance(other, BoundingBox) then
+    return false
+  end
 
   return self.min == other.min and self.max == other.max
 end
@@ -212,8 +214,12 @@ end
 -- @tparam BoundingBox right_operand
 -- @treturn boolean
 function BoundingBox.__eq(left_operand, right_operand)
-  assertions.is_instance(left_operand, BoundingBox)
-  assertions.is_instance(right_operand, BoundingBox)
+  if
+    not checks.is_instance(left_operand, BoundingBox)
+      or not checks.is_instance(right_operand, BoundingBox)
+  then
+    return false
+  end
 
   return left_operand:equals(right_operand)
 end
@@ -225,8 +231,11 @@ end
 function BoundingBox:almost_equals(other, epsilon)
   epsilon = epsilon or 1e-6
 
-  assertions.is_instance(other, BoundingBox)
   assertions.is_number(epsilon)
+
+  if not checks.is_instance(other, BoundingBox) then
+    return false
+  end
 
   return self.min:almost_equals(other.min, epsilon)
     and self.max:almost_equals(other.max, epsilon)

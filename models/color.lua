@@ -5,6 +5,7 @@
 
 local middleclass = require("middleclass")
 local assertions = require("luatypechecks.assertions")
+local checks = require("luatypechecks.checks")
 local Nameable = require("luaserialization.nameable")
 local Stringifiable = require("luaserialization.stringifiable")
 local utils = require("luamath.utils")
@@ -180,7 +181,9 @@ end
 -- @tparam Color other
 -- @treturn boolean
 function Color:equals(other)
-  assertions.is_instance(other, Color)
+  if not checks.is_instance(other, Color) then
+    return false
+  end
 
   return self.red == other.red
     and self.green == other.green
@@ -193,8 +196,12 @@ end
 -- @tparam Color right_operand
 -- @treturn boolean
 function Color.__eq(left_operand, right_operand)
-  assertions.is_instance(left_operand, Color)
-  assertions.is_instance(right_operand, Color)
+  if
+    not checks.is_instance(left_operand, Color)
+      or not checks.is_instance(right_operand, Color)
+  then
+    return false
+  end
 
   return left_operand:equals(right_operand)
 end
@@ -206,8 +213,11 @@ end
 function Color:almost_equals(other, epsilon)
   epsilon = epsilon or 1e-6
 
-  assertions.is_instance(other, Color)
   assertions.is_number(epsilon)
+
+  if not checks.is_instance(other, Color) then
+    return false
+  end
 
   return utils.almost_equal(self.red, other.red, epsilon)
     and utils.almost_equal(self.green, other.green, epsilon)
