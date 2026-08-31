@@ -1,8 +1,24 @@
 local luaunit = require("luaunit")
+local middleclass = require("middleclass")
+local assertions = require("luatypechecks.assertions")
 local checks = require("luatypechecks.checks")
 local json = require("luaserialization.json")
 local Matrix3x3 = require("luamath.matrix3x3")
 local Vector2D = require("luamath.vector2d")
+
+local Object = middleclass("Object")
+
+function Object:initialize(id)
+  assertions.is_number(id)
+
+  self.id = id
+end
+
+local AlwaysEqualObject = middleclass("AlwaysEqualObject", Object)
+
+function AlwaysEqualObject.__eq()
+  return true
+end
 
 -- luacheck: globals TestMatrix3x3
 TestMatrix3x3 = {}
@@ -383,7 +399,13 @@ function TestMatrix3x3.test_incompatible_comparisons()
   luaunit.assert_false(Matrix3x3.__eq(matrix, nil))
   luaunit.assert_false(Matrix3x3.__eq(nil, matrix))
 
-  local incompatible_values = {1, "value", {}, Vector2D:new(1, 2)}
+  local incompatible_values = {
+    1,
+    "value",
+    {},
+    Object:new(1),
+    AlwaysEqualObject:new(2),
+  }
   for _, value in ipairs(incompatible_values) do
     luaunit.assert_false(matrix:equals(value))
     luaunit.assert_false(matrix:almost_equals(value))

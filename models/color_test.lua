@@ -1,8 +1,23 @@
 local luaunit = require("luaunit")
+local middleclass = require("middleclass")
+local assertions = require("luatypechecks.assertions")
 local checks = require("luatypechecks.checks")
 local json = require("luaserialization.json")
 local Color = require("luamath.models.color")
-local Range = require("luamath.models.range")
+
+local Object = middleclass("Object")
+
+function Object:initialize(id)
+  assertions.is_number(id)
+
+  self.id = id
+end
+
+local AlwaysEqualObject = middleclass("AlwaysEqualObject", Object)
+
+function AlwaysEqualObject.__eq()
+  return true
+end
 
 -- luacheck: globals TestColor
 TestColor = {}
@@ -258,7 +273,13 @@ function TestColor.test_incompatible_comparisons()
   luaunit.assert_false(Color.__eq(color, nil))
   luaunit.assert_false(Color.__eq(nil, color))
 
-  local incompatible_values = {1, "value", {}, Range:new(1, 2)}
+  local incompatible_values = {
+    1,
+    "value",
+    {},
+    Object:new(1),
+    AlwaysEqualObject:new(2),
+  }
   for _, value in ipairs(incompatible_values) do
     luaunit.assert_false(color:equals(value))
     luaunit.assert_false(color:almost_equals(value))

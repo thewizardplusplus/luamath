@@ -1,9 +1,25 @@
 local luaunit = require("luaunit")
+local middleclass = require("middleclass")
+local assertions = require("luatypechecks.assertions")
 local checks = require("luatypechecks.checks")
 local json = require("luaserialization.json")
 local Size = require("luamath.models.size")
 local Vector2D = require("luamath.vector2d")
 local Matrix3x3 = require("luamath.matrix3x3")
+
+local Object = middleclass("Object")
+
+function Object:initialize(id)
+  assertions.is_number(id)
+
+  self.id = id
+end
+
+local AlwaysEqualObject = middleclass("AlwaysEqualObject", Object)
+
+function AlwaysEqualObject.__eq()
+  return true
+end
 
 -- luacheck: globals TestSize
 TestSize = {}
@@ -128,7 +144,13 @@ function TestSize.test_incompatible_comparisons()
   luaunit.assert_false(Vector2D.__eq(size, nil))
   luaunit.assert_false(Vector2D.__eq(nil, size))
 
-  local incompatible_values = {1, "value", {}, Matrix3x3.IDENTITY}
+  local incompatible_values = {
+    1,
+    "value",
+    {},
+    Object:new(1),
+    AlwaysEqualObject:new(2),
+  }
   for _, value in ipairs(incompatible_values) do
     luaunit.assert_false(size:equals(value))
     luaunit.assert_false(size:almost_equals(value))
@@ -140,7 +162,7 @@ function TestSize.test_incompatible_comparisons()
   luaunit.assert_false({} == size)
 end
 
-function TestSize.test_vector_compatibility()
+function TestSize.test_vector_comparison_compatibility()
   local size = Size:new(1, 2)
   local vector = Vector2D:new(1, 2)
 
