@@ -120,6 +120,38 @@ function TestSize.test_almost_equals()
   luaunit.assert_true(result)
 end
 
+function TestSize.test_incompatible_comparisons()
+  local size = Size:new(1, 2)
+  local incompatible_values = {1, "value", {}, Matrix3x3.IDENTITY}
+
+  luaunit.assert_false(size:equals(nil))
+  luaunit.assert_false(size:almost_equals(nil))
+  luaunit.assert_false(Vector2D.__eq(size, nil))
+  luaunit.assert_false(Vector2D.__eq(nil, size))
+  for _, value in ipairs(incompatible_values) do
+    luaunit.assert_false(size:equals(value))
+    luaunit.assert_false(size:almost_equals(value))
+    luaunit.assert_false(Vector2D.__eq(size, value))
+    luaunit.assert_false(Vector2D.__eq(value, size))
+  end
+
+  luaunit.assert_false(size == {})
+  luaunit.assert_false({} == size)
+  luaunit.assert_error(function() size:almost_equals(nil, "invalid") end)
+end
+
+function TestSize.test_vector_compatibility()
+  local size = Size:new(1, 2)
+  local vector = Vector2D:new(1, 2)
+
+  luaunit.assert_true(size:equals(vector))
+  luaunit.assert_true(vector:equals(size))
+  luaunit.assert_true(size:almost_equals(vector))
+  luaunit.assert_true(vector:almost_equals(size))
+  luaunit.assert_true(Vector2D.__eq(size, vector))
+  luaunit.assert_true(Vector2D.__eq(vector, size))
+end
+
 -- Size:length()
 function TestSize.test_length_squared()
   local size = Size:new(3, 4)

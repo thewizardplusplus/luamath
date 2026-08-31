@@ -9,7 +9,6 @@ local luaunit = require("luaunit")
 for _, module in ipairs({
   "vector2d",
   "matrix3x3",
-  "equality",
   "utils.init",
   "models.size",
   "models.boundingbox",
