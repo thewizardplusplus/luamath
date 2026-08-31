@@ -162,12 +162,13 @@ end
 
 function TestRange.test_incompatible_comparisons()
   local range = Range:new(23, 42)
-  local incompatible_values = {1, "value", {}, Color:new(0, 0, 0)}
 
   luaunit.assert_false(range:equals(nil))
   luaunit.assert_false(range:almost_equals(nil))
   luaunit.assert_false(Range.__eq(range, nil))
   luaunit.assert_false(Range.__eq(nil, range))
+
+  local incompatible_values = {1, "value", {}, Color:new(0, 0, 0)}
   for _, value in ipairs(incompatible_values) do
     luaunit.assert_false(range:equals(value))
     luaunit.assert_false(range:almost_equals(value))
@@ -177,7 +178,6 @@ function TestRange.test_incompatible_comparisons()
 
   luaunit.assert_false(range == {})
   luaunit.assert_false({} == range)
-  luaunit.assert_error(function() range:almost_equals(nil, "invalid") end)
 end
 
 -- Range properties

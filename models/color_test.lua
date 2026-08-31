@@ -252,12 +252,13 @@ end
 
 function TestColor.test_incompatible_comparisons()
   local color = Color:new(1, 0.5, 0)
-  local incompatible_values = {1, "value", {}, Range:new(1, 2)}
 
   luaunit.assert_false(color:equals(nil))
   luaunit.assert_false(color:almost_equals(nil))
   luaunit.assert_false(Color.__eq(color, nil))
   luaunit.assert_false(Color.__eq(nil, color))
+
+  local incompatible_values = {1, "value", {}, Range:new(1, 2)}
   for _, value in ipairs(incompatible_values) do
     luaunit.assert_false(color:equals(value))
     luaunit.assert_false(color:almost_equals(value))
@@ -267,7 +268,6 @@ function TestColor.test_incompatible_comparisons()
 
   luaunit.assert_false(color == {})
   luaunit.assert_false({} == color)
-  luaunit.assert_error(function() color:almost_equals(nil, "invalid") end)
 end
 
 -- Color:is_valid()

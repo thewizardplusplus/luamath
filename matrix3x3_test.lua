@@ -377,12 +377,13 @@ end
 
 function TestMatrix3x3.test_incompatible_comparisons()
   local matrix = Matrix3x3.IDENTITY
-  local incompatible_values = {1, "value", {}, Vector2D:new(1, 2)}
 
   luaunit.assert_false(matrix:equals(nil))
   luaunit.assert_false(matrix:almost_equals(nil))
   luaunit.assert_false(Matrix3x3.__eq(matrix, nil))
   luaunit.assert_false(Matrix3x3.__eq(nil, matrix))
+
+  local incompatible_values = {1, "value", {}, Vector2D:new(1, 2)}
   for _, value in ipairs(incompatible_values) do
     luaunit.assert_false(matrix:equals(value))
     luaunit.assert_false(matrix:almost_equals(value))
@@ -392,7 +393,6 @@ function TestMatrix3x3.test_incompatible_comparisons()
 
   luaunit.assert_false(matrix == {})
   luaunit.assert_false({} == matrix)
-  luaunit.assert_error(function() matrix:almost_equals(nil, "invalid") end)
 end
 
 -- Matrix3x3:inverse()

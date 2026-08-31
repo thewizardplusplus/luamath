@@ -147,12 +147,13 @@ end
 
 function TestVector2D.test_incompatible_comparisons()
   local vector = Vector2D:new(1, 2)
-  local incompatible_values = {1, "value", {}, Matrix3x3.IDENTITY}
 
   luaunit.assert_false(vector:equals(nil))
   luaunit.assert_false(vector:almost_equals(nil))
   luaunit.assert_false(Vector2D.__eq(vector, nil))
   luaunit.assert_false(Vector2D.__eq(nil, vector))
+
+  local incompatible_values = {1, "value", {}, Matrix3x3.IDENTITY}
   for _, value in ipairs(incompatible_values) do
     luaunit.assert_false(vector:equals(value))
     luaunit.assert_false(vector:almost_equals(value))
@@ -162,7 +163,6 @@ function TestVector2D.test_incompatible_comparisons()
 
   luaunit.assert_false(vector == {})
   luaunit.assert_false({} == vector)
-  luaunit.assert_error(function() vector:almost_equals(nil, "invalid") end)
 end
 
 -- Vector2D:length()

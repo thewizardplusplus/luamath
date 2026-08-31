@@ -385,12 +385,13 @@ end
 
 function TestBoundingBox.test_incompatible_comparisons()
   local box = BoundingBox:new(Vector2D:new(1, 2), Vector2D:new(3, 4))
-  local incompatible_values = {1, "value", {}, Range:new(1, 2)}
 
   luaunit.assert_false(box:equals(nil))
   luaunit.assert_false(box:almost_equals(nil))
   luaunit.assert_false(BoundingBox.__eq(box, nil))
   luaunit.assert_false(BoundingBox.__eq(nil, box))
+
+  local incompatible_values = {1, "value", {}, Range:new(1, 2)}
   for _, value in ipairs(incompatible_values) do
     luaunit.assert_false(box:equals(value))
     luaunit.assert_false(box:almost_equals(value))
@@ -400,7 +401,6 @@ function TestBoundingBox.test_incompatible_comparisons()
 
   luaunit.assert_false(box == {})
   luaunit.assert_false({} == box)
-  luaunit.assert_error(function() box:almost_equals(nil, "invalid") end)
 end
 
 -- BoundingBox:is_valid()

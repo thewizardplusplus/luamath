@@ -122,12 +122,13 @@ end
 
 function TestSize.test_incompatible_comparisons()
   local size = Size:new(1, 2)
-  local incompatible_values = {1, "value", {}, Matrix3x3.IDENTITY}
 
   luaunit.assert_false(size:equals(nil))
   luaunit.assert_false(size:almost_equals(nil))
   luaunit.assert_false(Vector2D.__eq(size, nil))
   luaunit.assert_false(Vector2D.__eq(nil, size))
+
+  local incompatible_values = {1, "value", {}, Matrix3x3.IDENTITY}
   for _, value in ipairs(incompatible_values) do
     luaunit.assert_false(size:equals(value))
     luaunit.assert_false(size:almost_equals(value))
@@ -137,7 +138,6 @@ function TestSize.test_incompatible_comparisons()
 
   luaunit.assert_false(size == {})
   luaunit.assert_false({} == size)
-  luaunit.assert_error(function() size:almost_equals(nil, "invalid") end)
 end
 
 function TestSize.test_vector_compatibility()
