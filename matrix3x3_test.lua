@@ -5,6 +5,7 @@ local checks = require("luatypechecks.checks")
 local json = require("luaserialization.json")
 local Matrix3x3 = require("luamath.matrix3x3")
 local Vector2D = require("luamath.vector2d")
+local Size = require("luamath.models.size")
 
 local Object = middleclass("Object")
 
@@ -91,14 +92,27 @@ function TestMatrix3x3.test_from_options_copies_inputs()
 end
 
 -- Matrix3x3.static.translate()
-function TestMatrix3x3.test_translate()
-  local result = Matrix3x3.translate(5, 7)
+function TestMatrix3x3.test_translate_with_vector()
+  local result = Matrix3x3.translate(Vector2D:new(5, 7))
 
   luaunit.assert_equals(result, Matrix3x3:new({
     {1, 0, 5},
     {0, 1, 7},
     {0, 0, 1},
   }))
+end
+
+function TestMatrix3x3.test_translate_with_size()
+  luaunit.assert_equals(
+    Matrix3x3.translate(Size:new(5, 7)),
+    Matrix3x3.translate(Vector2D:new(5, 7))
+  )
+end
+
+function TestMatrix3x3.test_translate_rejects_number()
+  luaunit.assert_error(function()
+    Matrix3x3.translate(5)
+  end)
 end
 
 -- Matrix3x3.static.rotate()
@@ -113,8 +127,8 @@ function TestMatrix3x3.test_rotate()
 end
 
 -- Matrix3x3.static.scale()
-function TestMatrix3x3.test_scale()
-  local result = Matrix3x3.scale(2, 3)
+function TestMatrix3x3.test_scale_with_vector()
+  local result = Matrix3x3.scale(Vector2D:new(2, 3))
 
   luaunit.assert_equals(result, Matrix3x3:new({
     {2, 0, 0},
@@ -123,15 +137,35 @@ function TestMatrix3x3.test_scale()
   }))
 end
 
+function TestMatrix3x3.test_scale_with_number()
+  luaunit.assert_equals(Matrix3x3.scale(2), Matrix3x3:new({
+    {2, 0, 0},
+    {0, 2, 0},
+    {0, 0, 1},
+  }))
+end
+
+function TestMatrix3x3.test_scale_rejects_invalid_type()
+  luaunit.assert_error(function()
+    Matrix3x3.scale("invalid")
+  end)
+end
+
 -- Matrix3x3.static.shear()
-function TestMatrix3x3.test_shear()
-  local result = Matrix3x3.shear(2, 3)
+function TestMatrix3x3.test_shear_with_vector()
+  local result = Matrix3x3.shear(Vector2D:new(2, 3))
 
   luaunit.assert_equals(result, Matrix3x3:new({
     {1, 2, 0},
     {3, 1, 0},
     {0, 0, 1},
   }))
+end
+
+function TestMatrix3x3.test_shear_rejects_number()
+  luaunit.assert_error(function()
+    Matrix3x3.shear(2)
+  end)
 end
 
 -- Matrix3x3:new()

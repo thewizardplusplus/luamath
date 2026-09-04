@@ -315,6 +315,26 @@ function Range:translate(delta)
 end
 
 ---
+-- @tparam Range left_operand
+-- @tparam number right_operand
+-- @treturn Range
+function Range.__add(left_operand, right_operand)
+  assertions.is_instance(left_operand, Range)
+
+  return left_operand:translate(right_operand)
+end
+
+---
+-- @tparam Range left_operand
+-- @tparam number right_operand
+-- @treturn Range
+function Range.__sub(left_operand, right_operand)
+  assertions.is_instance(left_operand, Range)
+
+  return left_operand:translate(-right_operand)
+end
+
+---
 -- ⚠️. Expand the range symmetrically.
 -- @tparam number delta
 -- @treturn Range

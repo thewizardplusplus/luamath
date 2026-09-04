@@ -61,16 +61,14 @@ end
 ---
 -- @function translate
 -- @static
--- @tparam number delta_x
--- @tparam number delta_y
+-- @tparam Vector2D delta
 -- @treturn Matrix3x3
-function Matrix3x3.static.translate(delta_x, delta_y)
-  assertions.is_number(delta_x)
-  assertions.is_number(delta_y)
+function Matrix3x3.static.translate(delta)
+  assertions.is_instance(delta, Vector2D)
 
   return Matrix3x3:new({
-    {1, 0, delta_x},
-    {0, 1, delta_y},
+    {1, 0, delta.x},
+    {0, 1, delta.y},
     {0, 0, 1},
   })
 end
@@ -96,16 +94,20 @@ end
 ---
 -- @function scale
 -- @static
--- @tparam number scale_x
--- @tparam number scale_y
+-- @tparam number|Vector2D scale uniform or per-axis scale
 -- @treturn Matrix3x3
-function Matrix3x3.static.scale(scale_x, scale_y)
-  assertions.is_number(scale_x)
-  assertions.is_number(scale_y)
+function Matrix3x3.static.scale(scale)
+  local is_number = checks.is_number(scale)
+  local is_vector_2d = checks.is_instance(scale, Vector2D)
+  assertions.is_true(is_number or is_vector_2d)
+
+  if is_number then
+    scale = Vector2D:new(scale, scale)
+  end
 
   return Matrix3x3:new({
-    {scale_x, 0, 0},
-    {0, scale_y, 0},
+    {scale.x, 0, 0},
+    {0, scale.y, 0},
     {0, 0, 1},
   })
 end
@@ -113,19 +115,17 @@ end
 ---
 -- ⚠️. Creates a shear (skew) transformation, which slants a shape along one
 -- or both axes by shifting each coordinate in proportion to the other:
--- `x' = x + shear_x * y`, `y' = y + shear_y * x`.
+-- `x' = x + shear.x * y`, `y' = y + shear.y * x`.
 -- @function shear
 -- @static
--- @tparam number shear_x
--- @tparam number shear_y
+-- @tparam Vector2D shear per-axis shear factors
 -- @treturn Matrix3x3
-function Matrix3x3.static.shear(shear_x, shear_y)
-  assertions.is_number(shear_x)
-  assertions.is_number(shear_y)
+function Matrix3x3.static.shear(shear)
+  assertions.is_instance(shear, Vector2D)
 
   return Matrix3x3:new({
-    {1, shear_x, 0},
-    {shear_y, 1, 0},
+    {1, shear.x, 0},
+    {shear.y, 1, 0},
     {0, 0, 1},
   })
 end
