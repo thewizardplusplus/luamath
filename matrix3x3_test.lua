@@ -92,7 +92,7 @@ end
 
 -- Matrix3x3.static.translate()
 function TestMatrix3x3.test_translate()
-  local result = Matrix3x3.translate(5, 7)
+  local result = Matrix3x3.translate(Vector2D:new(5, 7))
 
   luaunit.assert_equals(result, Matrix3x3:new({
     {1, 0, 5},
@@ -113,8 +113,18 @@ function TestMatrix3x3.test_rotate()
 end
 
 -- Matrix3x3.static.scale()
-function TestMatrix3x3.test_scale()
-  local result = Matrix3x3.scale(2, 3)
+function TestMatrix3x3.test_scale_scalar()
+  local result = Matrix3x3.scale(2)
+
+  luaunit.assert_equals(result, Matrix3x3:new({
+    {2, 0, 0},
+    {0, 2, 0},
+    {0, 0, 1},
+  }))
+end
+
+function TestMatrix3x3.test_scale_vector()
+  local result = Matrix3x3.scale(Vector2D:new(2, 3))
 
   luaunit.assert_equals(result, Matrix3x3:new({
     {2, 0, 0},
@@ -125,7 +135,7 @@ end
 
 -- Matrix3x3.static.shear()
 function TestMatrix3x3.test_shear()
-  local result = Matrix3x3.shear(2, 3)
+  local result = Matrix3x3.shear(Vector2D:new(2, 3))
 
   luaunit.assert_equals(result, Matrix3x3:new({
     {1, 2, 0},
