@@ -62,10 +62,10 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
       - `ZERO` — zero matrix
       - `IDENTITY` — identity matrix
     - **Factories**:
-      - `translate(delta_x, delta_y)` — translation
+      - `translate(delta)` — translation by a `Vector2D`
       - `rotate(angle)` — rotation
-      - `scale(scale_x, scale_y)` — scaling
-      - `shear(shear_x, shear_y)` — shear
+      - `scale(scale)` — uniform numeric or per-axis `Vector2D` scaling
+      - `shear(shear)` — shear by a `Vector2D`
     - **Operations**:
       - `equals(other)` — check exact equality
       - `almost_equals(other, [epsilon])` — check approximate equality within a given epsilon
