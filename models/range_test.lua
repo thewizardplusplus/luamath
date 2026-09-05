@@ -376,6 +376,22 @@ function TestRange.test_translate()
   luaunit.assert_equals(result, Range:new(33, 52))
 end
 
+function TestRange.test_translate_operators()
+  local range = Range:new(23, 42)
+
+  luaunit.assert_equals(range + 10, Range:new(33, 52))
+  luaunit.assert_equals(range - 10, Range:new(13, 32))
+end
+
+function TestRange.test_translate_operators_reject_reversed_operands()
+  luaunit.assert_error(function()
+    return 10 + Range:new(23, 42)
+  end)
+  luaunit.assert_error(function()
+    return 10 - Range:new(23, 42)
+  end)
+end
+
 function TestRange.test_expand()
   local result = Range:new(23, 42):expand(5)
 

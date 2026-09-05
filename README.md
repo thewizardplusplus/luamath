@@ -62,10 +62,10 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
       - `ZERO` — zero matrix
       - `IDENTITY` — identity matrix
     - **Factories**:
-      - `translate(delta_x, delta_y)` — translation
+      - `translate(delta)` — translation by a `Vector2D`
       - `rotate(angle)` — rotation
-      - `scale(scale_x, scale_y)` — scaling
-      - `shear(shear_x, shear_y)` — shear
+      - `scale(scale)` — uniform numeric or per-axis `Vector2D` scaling
+      - `shear(shear)` — shear by a `Vector2D`
     - **Operations**:
       - `equals(other)` — check exact equality
       - `almost_equals(other, [epsilon])` — check approximate equality within a given epsilon
@@ -137,6 +137,8 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
       - **Operators (via metamethods)**:
         - `==` — check exact equality (`__eq()`)
         - `#range` — compute the range length (`__len()`); supported only since Lua 5.2
+        - `range + delta` — translate the range (`__add()`)
+        - `range - delta` — translate the range by the negated delta (`__sub()`)
     - `BoundingBox` — an axis-aligned bounding box with closed boundaries:
       - **Serialization**:
         - `schema()` — return the JSON Schema for the class
@@ -172,11 +174,13 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
         - `inverse_lerp(value)` — compute interpolation progress per axis
         - `wrap(value)` — wrap a vector into the box per axis
         - `random()` — generate a random point in the box
-        - `translate(delta_x, delta_y)` — translate the box
-        - `expand(delta_x, delta_y)` — expand the box symmetrically
-        - `scale(scale_x, scale_y)` — scale the box around its center
+        - `translate(delta)` — translate the box by a `Vector2D`
+        - `expand(delta)` — expand the box symmetrically by a number or `Vector2D`
+        - `scale(scale)` — scale the box around its center by a non-negative number or `Vector2D`
       - **Operators (via metamethods)**:
         - `==` — check exact equality (`__eq()`)
+        - `box + delta` — translate the box (`__add()`)
+        - `box - delta` — translate the box by the negated delta (`__sub()`)
     - `Color` — an RGBA color with finite non-negative color channels and normalized alpha:
       - **Serialization**:
         - `schema()` — return the JSON Schema for the class

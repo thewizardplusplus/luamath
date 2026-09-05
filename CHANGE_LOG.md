@@ -1,5 +1,13 @@
 # Change Log
 
+## Unreleased
+
+- Accept `Vector2D` (including `Size`) arguments for two-dimensional
+  translation, scaling, expansion, and shear operations
+- Accept numbers as uniform factors for matrix and bounding-box scaling and as
+  uniform amounts for bounding-box expansion
+- Add `+` and `-` translation operators to `Range` and `BoundingBox`
+
 ## [v1.2.1](https://github.com/thewizardplusplus/luamath/tree/v1.2.1) (2026-08-30)
 
 Add colors and the `sign()` utility function.
