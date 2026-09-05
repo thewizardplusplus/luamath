@@ -174,9 +174,9 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
         - `inverse_lerp(value)` — compute interpolation progress per axis
         - `wrap(value)` — wrap a vector into the box per axis
         - `random()` — generate a random point in the box
-        - `translate(delta_x, delta_y)` — translate the box
-        - `expand(delta_x, delta_y)` — expand the box symmetrically
-        - `scale(scale_x, scale_y)` — scale the box around its center
+        - `translate(delta)` — translate the box by a `Vector2D`
+        - `expand(delta)` — expand the box symmetrically by a number or `Vector2D`
+        - `scale(scale)` — scale the box around its center by a non-negative number or `Vector2D`
       - **Operators (via metamethods)**:
         - `==` — check exact equality (`__eq()`)
     - `Color` — an RGBA color with finite non-negative color channels and normalized alpha:

@@ -750,7 +750,7 @@ end
 function TestBoundingBox.test_translate()
   local box = BoundingBox:new(Vector2D:new(1, 2), Vector2D:new(5, 6))
 
-  local result = box:translate(3, 4)
+  local result = box:translate(Vector2D:new(3, 4))
 
   luaunit.assert_equals(result, BoundingBox:new(
     Vector2D:new(4, 6),
@@ -759,10 +759,21 @@ function TestBoundingBox.test_translate()
 end
 
 -- BoundingBox:expand()
-function TestBoundingBox.test_expand_valid()
+function TestBoundingBox.test_expand_scalar()
   local box = BoundingBox:new(Vector2D:new(3, 4), Vector2D:new(7, 8))
 
-  local result = box:expand(2, 1)
+  local result = box:expand(2)
+
+  luaunit.assert_equals(result, BoundingBox:new(
+    Vector2D:new(1, 2),
+    Vector2D:new(9, 10)
+  ))
+end
+
+function TestBoundingBox.test_expand_vector()
+  local box = BoundingBox:new(Vector2D:new(3, 4), Vector2D:new(7, 8))
+
+  local result = box:expand(Vector2D:new(2, 1))
 
   luaunit.assert_equals(result, BoundingBox:new(
     Vector2D:new(1, 3),
@@ -776,16 +787,27 @@ function TestBoundingBox.test_expand_invalid()
   luaunit.assert_error_msg_contains(
     "`min` must be at most `max` on each axis",
     function()
-      box:expand(-10, -10)
+      box:expand(Vector2D:new(-10, -10))
     end
   )
 end
 
 -- BoundingBox:scale()
-function TestBoundingBox.test_scale_valid()
+function TestBoundingBox.test_scale_scalar()
   local box = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(10, 20))
 
-  local result = box:scale(2, 3)
+  local result = box:scale(2)
+
+  luaunit.assert_equals(result, BoundingBox:new(
+    Vector2D:new(-5, -10),
+    Vector2D:new(15, 30)
+  ))
+end
+
+function TestBoundingBox.test_scale_vector()
+  local box = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(10, 20))
+
+  local result = box:scale(Vector2D:new(2, 3))
 
   luaunit.assert_equals(result, BoundingBox:new(
     Vector2D:new(-5, -20),
@@ -796,7 +818,7 @@ end
 function TestBoundingBox.test_scale_to_point()
   local box = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(10, 20))
 
-  local result = box:scale(0, 0)
+  local result = box:scale(Vector2D:new(0, 0))
 
   luaunit.assert_equals(result, BoundingBox:new(
     Vector2D:new(5, 10),
@@ -807,7 +829,7 @@ end
 function TestBoundingBox.test_scale_to_zero_width()
   local box = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(10, 20))
 
-  local result = box:scale(0, 1)
+  local result = box:scale(Vector2D:new(0, 1))
 
   luaunit.assert_equals(result, BoundingBox:new(
     Vector2D:new(5, 0),
@@ -818,7 +840,7 @@ end
 function TestBoundingBox.test_scale_to_zero_height()
   local box = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(10, 20))
 
-  local result = box:scale(1, 0)
+  local result = box:scale(Vector2D:new(1, 0))
 
   luaunit.assert_equals(result, BoundingBox:new(
     Vector2D:new(0, 10),
@@ -826,13 +848,24 @@ function TestBoundingBox.test_scale_to_zero_height()
   ))
 end
 
+function TestBoundingBox.test_scale_rejects_negative_scalar()
+  local box = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(10, 20))
+
+  luaunit.assert_error_msg_contains(
+    "`scale` must be non-negative",
+    function()
+      box:scale(-1)
+    end
+  )
+end
+
 function TestBoundingBox.test_scale_rejects_negative_x_factor()
   local box = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(10, 20))
 
   luaunit.assert_error_msg_contains(
-    "`scale_x` and `scale_y` must be non-negative",
+    "every component of `scale` must be non-negative",
     function()
-      box:scale(-1, 1)
+      box:scale(Vector2D:new(-1, 1))
     end
   )
 end
@@ -841,9 +874,9 @@ function TestBoundingBox.test_scale_rejects_negative_y_factor()
   local box = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(10, 20))
 
   luaunit.assert_error_msg_contains(
-    "`scale_x` and `scale_y` must be non-negative",
+    "every component of `scale` must be non-negative",
     function()
-      box:scale(1, -1)
+      box:scale(Vector2D:new(1, -1))
     end
   )
 end
