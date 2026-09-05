@@ -97,19 +97,25 @@ end
 -- @tparam number|Vector2D scale uniform or per-axis scale
 -- @treturn Matrix3x3
 function Matrix3x3.static.scale(scale)
-  local is_number = checks.is_number(scale)
-  local is_vector_2d = checks.is_instance(scale, Vector2D)
-  assertions.is_true(is_number or is_vector_2d)
+  local is_scale_number = checks.is_number(scale)
+  local is_scale_vector_2d = checks.is_instance(scale, Vector2D)
+  assertions.is_true(is_scale_number or is_scale_vector_2d)
 
-  if is_number then
-    scale = Vector2D:new(scale, scale)
+  if is_scale_number then
+    return Matrix3x3:new({
+      {scale, 0, 0},
+      {0, scale, 0},
+      {0, 0, 1},
+    })
   end
 
-  return Matrix3x3:new({
-    {scale.x, 0, 0},
-    {0, scale.y, 0},
-    {0, 0, 1},
-  })
+  if is_scale_vector_2d then
+    return Matrix3x3:new({
+      {scale.x, 0, 0},
+      {0, scale.y, 0},
+      {0, 0, 1},
+    })
+  end
 end
 
 ---
