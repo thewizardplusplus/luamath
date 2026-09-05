@@ -179,6 +179,8 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
         - `scale(scale)` — scale the box around its center by a non-negative number or `Vector2D`
       - **Operators (via metamethods)**:
         - `==` — check exact equality (`__eq()`)
+        - `+` — translate the box (`__add()`)
+        - `-` — translate the box by the negated delta (`__sub()`)
     - `Color` — an RGBA color with finite non-negative color channels and normalized alpha:
       - **Serialization**:
         - `schema()` — return the JSON Schema for the class

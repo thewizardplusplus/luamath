@@ -477,6 +477,28 @@ function BoundingBox:translate(delta)
 end
 
 ---
+-- @tparam BoundingBox left_operand
+-- @tparam Vector2D right_operand
+-- @treturn BoundingBox
+function BoundingBox.__add(left_operand, right_operand)
+  assertions.is_instance(left_operand, BoundingBox)
+  assertions.is_instance(right_operand, Vector2D)
+
+  return left_operand:translate(right_operand)
+end
+
+---
+-- @tparam BoundingBox left_operand
+-- @tparam Vector2D right_operand
+-- @treturn BoundingBox
+function BoundingBox.__sub(left_operand, right_operand)
+  assertions.is_instance(left_operand, BoundingBox)
+  assertions.is_instance(right_operand, Vector2D)
+
+  return left_operand:translate(-right_operand)
+end
+
+---
 -- ⚠️. Expand the box symmetrically by per-axis amounts.
 -- @tparam number|Vector2D delta uniform or per-axis amount
 -- @treturn BoundingBox
