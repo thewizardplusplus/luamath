@@ -468,47 +468,55 @@ function BoundingBox:random()
 end
 
 ---
--- @tparam number delta_x
--- @tparam number delta_y
+-- @tparam Vector2D delta
 -- @treturn BoundingBox
-function BoundingBox:translate(delta_x, delta_y)
-  assertions.is_number(delta_x)
-  assertions.is_number(delta_y)
+function BoundingBox:translate(delta)
+  assertions.is_instance(delta, Vector2D)
 
-  local delta = Vector2D:new(delta_x, delta_y)
   return BoundingBox:new(self.min + delta, self.max + delta)
 end
 
 ---
 -- ⚠️. Expand the box symmetrically by per-axis amounts.
--- @tparam number delta_x
--- @tparam number delta_y
+-- @tparam number|Vector2D delta uniform or per-axis amount
 -- @treturn BoundingBox
 -- @raise error message
-function BoundingBox:expand(delta_x, delta_y)
-  assertions.is_number(delta_x)
-  assertions.is_number(delta_y)
+function BoundingBox:expand(delta)
+  local is_delta_number = checks.is_number(delta)
+  local is_delta_vector_2d = checks.is_instance(delta, Vector2D)
+  assertions.is_true(is_delta_number or is_delta_vector_2d)
 
-  local delta = Vector2D:new(delta_x, delta_y)
+  if is_delta_number then
+    delta = Vector2D:new(delta, delta)
+  end
+
   return BoundingBox:new(self.min - delta, self.max + delta)
 end
 
 ---
 -- ⚠️. Scale the box around its center by per-axis factors.
--- @tparam number scale_x non-negative horizontal scale factor
--- @tparam number scale_y non-negative vertical scale factor
+-- @tparam number|Vector2D scale non-negative uniform or per-axis scale
 -- @treturn BoundingBox
 -- @raise error message
-function BoundingBox:scale(scale_x, scale_y)
-  assertions.is_number(scale_x)
-  assertions.is_number(scale_y)
+function BoundingBox:scale(scale)
+  local is_scale_number = checks.is_number(scale)
+  local is_scale_vector_2d = checks.is_instance(scale, Vector2D)
+  assertions.is_true(is_scale_number or is_scale_vector_2d)
 
-  if scale_x < 0 or scale_y < 0 then
-    error("`scale_x` and `scale_y` must be non-negative")
+  if is_scale_number then
+    if scale < 0 then
+      error("`scale` must be non-negative")
+    end
+
+    scale = Vector2D:new(scale, scale)
+  end
+
+  if is_scale_vector_2d and (scale.x < 0 or scale.y < 0) then
+    error("every component of `scale` must be non-negative")
   end
 
   local center = self:center()
-  local scaled_half_size = (self:size() / 2) * Vector2D:new(scale_x, scale_y)
+  local scaled_half_size = (self:size() / 2) * scale
   return BoundingBox:new(center - scaled_half_size, center + scaled_half_size)
 end
 
