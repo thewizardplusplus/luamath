@@ -749,12 +749,33 @@ end
 -- BoundingBox:translate()
 function TestBoundingBox.test_translate()
   local box = BoundingBox:new(Vector2D:new(1, 2), Vector2D:new(5, 6))
+  local delta = Vector2D:new(3, 4)
 
-  local result = box:translate(Vector2D:new(3, 4))
-
-  luaunit.assert_equals(result, BoundingBox:new(
+  luaunit.assert_equals(box:translate(delta), BoundingBox:new(
     Vector2D:new(4, 6),
     Vector2D:new(8, 10)
+  ))
+  luaunit.assert_equals(box:translate(-delta), BoundingBox:new(
+    Vector2D:new(-2, -2),
+    Vector2D:new(2, 2)
+  ))
+end
+
+function TestBoundingBox.test_add()
+  local box = BoundingBox:new(Vector2D:new(1, 2), Vector2D:new(5, 6))
+
+  luaunit.assert_equals(box + Vector2D:new(3, 4), BoundingBox:new(
+    Vector2D:new(4, 6),
+    Vector2D:new(8, 10)
+  ))
+end
+
+function TestBoundingBox.test_sub()
+  local box = BoundingBox:new(Vector2D:new(1, 2), Vector2D:new(5, 6))
+
+  luaunit.assert_equals(box - Vector2D:new(3, 4), BoundingBox:new(
+    Vector2D:new(-2, -2),
+    Vector2D:new(2, 2)
   ))
 end
 
