@@ -137,6 +137,8 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
       - **Operators (via metamethods)**:
         - `==` — check exact equality (`__eq()`)
         - `#range` — compute the range length (`__len()`); supported only since Lua 5.2
+        - `+` — translate the range (`__add()`)
+        - `-` — translate the range by the negated delta (`__sub()`)
     - `BoundingBox` — an axis-aligned bounding box with closed boundaries:
       - **Serialization**:
         - `schema()` — return the JSON Schema for the class

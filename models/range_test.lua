@@ -371,9 +371,22 @@ end
 
 -- Range range operations
 function TestRange.test_translate()
-  local result = Range:new(23, 42):translate(10)
+  local range = Range:new(23, 42)
 
-  luaunit.assert_equals(result, Range:new(33, 52))
+  luaunit.assert_equals(range:translate(10), Range:new(33, 52))
+  luaunit.assert_equals(range:translate(-10), Range:new(13, 32))
+end
+
+function TestRange.test_add()
+  local range = Range:new(23, 42)
+
+  luaunit.assert_equals(range + 10, Range:new(33, 52))
+end
+
+function TestRange.test_sub()
+  local range = Range:new(23, 42)
+
+  luaunit.assert_equals(range - 10, Range:new(13, 32))
 end
 
 function TestRange.test_expand()
