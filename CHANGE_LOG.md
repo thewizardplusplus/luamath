@@ -8,6 +8,9 @@ Add colors and the `sign()` utility function.
 - Add the `sign()` utility function
 - Perform refactoring:
   - Add the `Matrix3x3:inverse()` method
+  - Use `Vector2D` arguments in the `Matrix3x3` factories and `BoundingBox` transformation methods:
+    - This includes accepting numbers as uniform factors or amounts where applicable
+  - Add translation operators to the `Range` and `BoundingBox` classes
   - Copy mutable inputs passed to constructors and factories
   - Make equality methods return false for incompatible types
 
