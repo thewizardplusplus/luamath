@@ -802,6 +802,39 @@ function TestBoundingBox.test_expand_vector()
   ))
 end
 
+function TestBoundingBox.test_expand_to_point()
+  local box = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(10, 20))
+
+  local result = box:expand(Vector2D:new(-5, -10))
+
+  luaunit.assert_equals(result, BoundingBox:new(
+    Vector2D:new(5, 10),
+    Vector2D:new(5, 10)
+  ))
+end
+
+function TestBoundingBox.test_expand_to_zero_width()
+  local box = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(10, 20))
+
+  local result = box:expand(Vector2D:new(-5, 0))
+
+  luaunit.assert_equals(result, BoundingBox:new(
+    Vector2D:new(5, 0),
+    Vector2D:new(5, 20)
+  ))
+end
+
+function TestBoundingBox.test_expand_to_zero_height()
+  local box = BoundingBox:new(Vector2D:new(0, 0), Vector2D:new(10, 20))
+
+  local result = box:expand(Vector2D:new(0, -10))
+
+  luaunit.assert_equals(result, BoundingBox:new(
+    Vector2D:new(0, 10),
+    Vector2D:new(10, 10)
+  ))
+end
+
 function TestBoundingBox.test_expand_invalid()
   local box = BoundingBox:new(Vector2D:new(3, 4), Vector2D:new(7, 8))
 

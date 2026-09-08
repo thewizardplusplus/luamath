@@ -389,10 +389,16 @@ function TestRange.test_sub()
   luaunit.assert_equals(range - 10, Range:new(13, 32))
 end
 
-function TestRange.test_expand()
+function TestRange.test_expand_valid()
   local result = Range:new(23, 42):expand(5)
 
   luaunit.assert_equals(result, Range:new(18, 47))
+end
+
+function TestRange.test_expand_to_zero()
+  local result = Range:new(20, 40):expand(-10)
+
+  luaunit.assert_equals(result, Range:new(30, 30))
 end
 
 function TestRange.test_expand_rejects_inversion()
