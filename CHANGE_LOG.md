@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.2.1](https://github.com/thewizardplusplus/luamath/tree/v1.2.1) (2026-09-08)
+
+Add colors and the `sign()` utility function.
+
+- Add the `Color` class
+- Add the `sign()` utility function
+- Perform refactoring:
+  - Add the `Matrix3x3:inverse()` method
+  - Use `Vector2D` arguments in the `Matrix3x3` factories and `BoundingBox` transformation methods:
+    - This includes accepting numbers as uniform factors or amounts where applicable
+  - Add translation operators to the `Range` and `BoundingBox` classes
+  - Copy mutable inputs passed to constructors and factories
+  - Make equality methods return false for incompatible types
+
 ## [v1.2.0](https://github.com/thewizardplusplus/luamath/tree/v1.2.0) (2026-08-22)
 
 Add sizes, numeric ranges, bounding boxes, and utility functions.
@@ -15,7 +29,8 @@ Add sizes, numeric ranges, bounding boxes, and utility functions.
 Add the `Matrix3x3` class.
 
 - Add the `Matrix3x3` class
-- Support multiplication by the `Matrix3x3` in the `Vector2D` class
+- Perform refactoring:
+  - Support multiplication by the `Matrix3x3` in the `Vector2D` class
 
 ## [v1.0.0](https://github.com/thewizardplusplus/luamath/tree/v1.0.0) (2025-07-12)
 
