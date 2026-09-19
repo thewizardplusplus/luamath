@@ -15,6 +15,12 @@ Vector2D:include(Nameable)
 Vector2D:include(Stringifiable)
 
 ---
+-- @table class
+-- @tfield Vector2D ZERO
+-- @tfield Vector2D BASIS_X
+-- @tfield Vector2D BASIS_Y
+
+---
 -- @function schema
 -- @static
 -- @treturn tab JSON Schema for this class
@@ -39,12 +45,6 @@ function Vector2D.static.from_options(options)
 
   return Vector2D:new(options.x, options.y)
 end
-
----
--- @table class
--- @tfield Vector2D ZERO
--- @tfield Vector2D BASIS_X
--- @tfield Vector2D BASIS_Y
 
 ---
 -- @table instance

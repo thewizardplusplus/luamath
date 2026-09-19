@@ -29,9 +29,9 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
       - `__data()` — return a table with the instance fields
       - `__tostring()` — return a string representation of the instance
     - **Constants**:
-      - `ZERO` — (0, 0)
-      - `BASIS_X` — (1, 0)
-      - `BASIS_Y` — (0, 1)
+      - `ZERO` — zero vector (0, 0)
+      - `BASIS_X` — unit basis vector along the X-axis (1, 0)
+      - `BASIS_Y` — unit basis vector along the Y-axis (0, 1)
     - **Operations**:
       - `equals(other)` — check exact equality
       - `almost_equals(other, [epsilon])` — check approximate equality within a given epsilon
@@ -87,6 +87,10 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
         - `from_options(options)` — construct a size from a table
         - `__data()` — return a table with the instance fields
         - `__tostring()` — return a string representation of the instance
+      - **Constants**:
+        - `ZERO` — zero vector (0, 0)
+        - `BASIS_X` — unit basis vector along the X-axis (1, 0)
+        - `BASIS_Y` — unit basis vector along the Y-axis (0, 1)
       - **Operations**:
         - `equals(other)` — check exact equality
         - `almost_equals(other, [epsilon])` — check approximate equality within a given epsilon

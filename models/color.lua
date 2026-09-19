@@ -23,6 +23,15 @@ Color:include(Nameable)
 Color:include(Stringifiable)
 
 ---
+-- @table class
+-- @tfield Color TRANSPARENT
+-- @tfield Color BLACK
+-- @tfield Color WHITE
+-- @tfield Color RED
+-- @tfield Color GREEN
+-- @tfield Color BLUE
+
+---
 -- @function schema
 -- @static
 -- @treturn tab JSON Schema for this class
@@ -116,15 +125,6 @@ function Color.static.from_hex(value)
 
   return Color.from_bytes(red, green, blue, alpha)
 end
-
----
--- @table class
--- @tfield Color TRANSPARENT
--- @tfield Color BLACK
--- @tfield Color WHITE
--- @tfield Color RED
--- @tfield Color GREEN
--- @tfield Color BLUE
 
 ---
 -- @table instance

@@ -16,6 +16,11 @@ Matrix3x3:include(Nameable)
 Matrix3x3:include(Stringifiable)
 
 ---
+-- @table class
+-- @tfield Matrix3x3 ZERO
+-- @tfield Matrix3x3 IDENTITY
+
+---
 -- @function schema
 -- @static
 -- @treturn tab JSON Schema for this class
@@ -52,11 +57,6 @@ function Matrix3x3.static.from_options(options)
 
   return Matrix3x3:new(options.elements)
 end
-
----
--- @table class
--- @tfield Matrix3x3 ZERO
--- @tfield Matrix3x3 IDENTITY
 
 ---
 -- @function translate

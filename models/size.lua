@@ -10,6 +10,12 @@ local Vector2D = require("luamath.vector2d")
 local Size = middleclass("Size", Vector2D)
 
 ---
+-- @table class
+-- @tfield Vector2D ZERO
+-- @tfield Vector2D BASIS_X
+-- @tfield Vector2D BASIS_Y
+
+---
 -- @function schema
 -- @static
 -- @treturn tab JSON Schema for this class
