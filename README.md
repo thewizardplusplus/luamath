@@ -88,7 +88,7 @@ _**Disclaimer:** this library was written directly on an Android smartphone with
         - `__data()` — return a table with the instance fields
         - `__tostring()` — return a string representation of the instance
       - **Constants**:
-        - `ZERO` — zero vector (0, 0)
+        - `ZERO` — zero size (0, 0)
         - `BASIS_X` — unit basis vector along the X-axis (1, 0)
         - `BASIS_Y` — unit basis vector along the Y-axis (0, 1)
       - **Operations**:

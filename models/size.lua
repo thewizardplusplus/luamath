@@ -11,7 +11,7 @@ local Size = middleclass("Size", Vector2D)
 
 ---
 -- @table class
--- @tfield Vector2D ZERO
+-- @tfield Size ZERO
 -- @tfield Vector2D BASIS_X
 -- @tfield Vector2D BASIS_Y
 
@@ -230,5 +230,8 @@ function Size.__div(left_operand, right_operand)
   local result = Vector2D.__div(left_operand, right_operand)
   return Size:new(result.x, result.y)
 end
+
+-- we cannot declare the constants at the beginning since the method `initialize()` isn't defined there yet
+Size.static.ZERO = Size:new(0, 0)
 
 return Size
